@@ -97,10 +97,11 @@ main{margin-top:20px}
 .key.mapped .leg{top:3px}
 .key .map{position:absolute;left:2px;right:2px;bottom:3px;font-size:clamp(7px,calc(var(--u) * .21),9px);font-weight:600;background:var(--red);color:var(--on-red);padding:1px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-mono)}
 .key .mc{position:absolute;top:2px;right:2px;width:13px;height:13px;background:var(--red);color:var(--on-red);font-family:var(--font-pixel);font-size:7px;line-height:13px;text-align:center;border:1px solid var(--key-ink)}
-.key:disabled{cursor:not-allowed;opacity:.85}
-.key:disabled:hover{transform:none}
 .super{display:flex;align-items:center;gap:22px;margin-top:16px;padding:14px 18px;background:var(--case);border:2px solid var(--key-ink);border-radius:8px;box-shadow:var(--shadow)}
 .super .desc{color:var(--ink)}
+.super .ports{display:flex;width:max-content;margin-top:8px;box-shadow:none}
+.super .ports button{min-width:36px;padding:5px 10px}
+.super .ports button.used::after{content:"";display:inline-block;width:5px;height:5px;margin-left:5px;vertical-align:middle;background:var(--red)}
 .super .desc b{display:block;font-family:var(--font-pixel);font-size:8px;text-transform:uppercase;margin-bottom:4px}
 .sbtn{position:relative;width:66px;height:66px;border-radius:50%;border:3px solid var(--key-ink);background:var(--red);color:var(--on-red);font-family:var(--font-pixel);font-size:14px;box-shadow:inset 0 -8px 0 var(--red-ink),0 3px 0 var(--key-ink);flex:none}
 .sbtn:hover{transform:translateY(-2px)} .sbtn[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:3px}
@@ -253,10 +254,10 @@ const LAYOUT = [
   [L('tab',1.5,'mod'),L('q'),L('w'),L('e'),L('r'),L('t'),L('y'),L('u'),L('i'),L('o'),L('p'),L('left_bracket'),L('right_bracket'),L('backslash',1.5),G(.5),L('delete',1,'mod'),L('end',1,'mod'),L('page_down',1,'mod')],
   [L('caps_lock',1.75,'mod'),L('a'),L('s'),L('d'),L('f'),L('g'),L('h'),L('j'),L('k'),L('l'),L('semicolon'),L('quote'),L('enter',2.25,'mod')],
   [L('left_shift',2.25,'mod'),L('z'),L('x'),L('c'),L('v'),L('b'),L('n'),L('m'),L('comma'),L('period'),L('slash'),L('right_shift',2.75,'mod'),G(1.5),L('up',1,'mod')],
-  [L('left_ctrl',1.25,'mod'),L('left_gui',1.25,'mod'),L('left_alt',1.25,'mod'),L('space',6.25),L('right_alt',1.25,'mod'),L('fn',1.25,'mod fnkey'),L('application',1.25,'mod'),L('right_ctrl',1.25,'mod'),G(.5),L('left',1,'mod'),L('down',1,'mod'),L('right',1,'mod')],
+  [L('left_ctrl',1.25,'mod'),L('left_gui',1.25,'mod'),L('left_alt',1.25,'mod'),L('space',6.25),L('right_alt',1.25,'mod'),L('super_b',1.25,'accent'),L('super_a',1.25,'accent'),L('right_ctrl',1.25,'mod'),G(.5),L('left',1,'mod'),L('down',1,'mod'),L('right',1,'mod')],
 ];
-const LEGEND = {esc:'Esc',grave:'~\n`','1':'!\n1','2':'@\n2','3':'#\n3','4':'$\n4','5':'%\n5','6':'^\n6','7':'&\n7','8':'*\n8','9':'(\n9','0':')\n0',minus:'_\n-',equal:'+\n=',backspace:'Backspace',tab:'Tab',left_bracket:'{\n[',right_bracket:'}\n]',backslash:'|\n\\',caps_lock:'Caps',semicolon:':\n;',quote:'"\n\'',enter:'Enter',left_shift:'Shift',comma:'<\n,',period:'>\n.',slash:'?\n/',right_shift:'Shift',left_ctrl:'Ctrl',left_gui:'Win',left_alt:'Alt',space:'',right_alt:'Alt',fn:'Fn',application:'Menu',right_ctrl:'Ctrl',print_screen:'PrtSc',scroll_lock:'ScrLk',pause:'Pause',insert:'Ins',home:'Home',page_up:'PgUp',delete:'Del',end:'End',page_down:'PgDn',up:'▲',down:'▼',left:'◀',right:'▶'};
-const PRETTY = {esc:'Esc',grave:'` (grave)',minus:'- (minus)',equal:'= (equal)',left_bracket:'[ (left bracket)',right_bracket:'] (right bracket)',backslash:'\\ (backslash)',semicolon:'; (semicolon)',quote:"' (quote)",comma:', (comma)',period:'. (period)',slash:'/ (slash)',application:'Menu',left_gui:'Left Win',right_gui:'Right Win',super_a:'Super Button A',super_b:'Super Button B',kp_slash:'Keypad /',kp_asterisk:'Keypad *',kp_minus:'Keypad -',kp_plus:'Keypad +',kp_period:'Keypad .',non_us_hash:'Non-US #',non_us_backslash:'Non-US \\'};
+const LEGEND = {esc:'Esc',grave:'~\n`','1':'!\n1','2':'@\n2','3':'#\n3','4':'$\n4','5':'%\n5','6':'^\n6','7':'&\n7','8':'*\n8','9':'(\n9','0':')\n0',minus:'_\n-',equal:'+\n=',backspace:'Backspace',tab:'Tab',left_bracket:'{\n[',right_bracket:'}\n]',backslash:'|\n\\',caps_lock:'Caps',semicolon:':\n;',quote:'"\n\'',enter:'Enter',left_shift:'Shift',comma:'<\n,',period:'>\n.',slash:'?\n/',right_shift:'Shift',left_ctrl:'Ctrl',left_gui:'Win',left_alt:'Alt',space:'',right_alt:'Alt',super_b:'B',super_a:'A',right_ctrl:'Ctrl',print_screen:'PrtSc',scroll_lock:'ScrLk',pause:'Pause',insert:'Ins',home:'Home',page_up:'PgUp',delete:'Del',end:'End',page_down:'PgDn',up:'▲',down:'▼',left:'◀',right:'▶'};
+const PRETTY = {esc:'Esc',grave:'` (grave)',minus:'- (minus)',equal:'= (equal)',left_bracket:'[ (left bracket)',right_bracket:'] (right bracket)',backslash:'\\ (backslash)',semicolon:'; (semicolon)',quote:"' (quote)",comma:', (comma)',period:'. (period)',slash:'/ (slash)',application:'Menu',left_gui:'Left Win',right_gui:'Right Win',super_a:'Red A key',super_b:'Red B key',kp_slash:'Keypad /',kp_asterisk:'Keypad *',kp_minus:'Keypad -',kp_plus:'Keypad +',kp_period:'Keypad .',non_us_hash:'Non-US #',non_us_backslash:'Non-US \\'};
 const MEDIA_PRETTY = {volume_down:'Volume down',volume_up:'Volume up',mute:'Mute',play_pause:'Play / Pause',prev_track:'Previous track',next_track:'Next track',mail:'Mail',calculator:'Calculator',my_computer:'My Computer',browser_home:'Browser home',brightness_down:'Brightness down',brightness_up:'Brightness up'};
 const MOUSE_PRETTY = {mouse_left:'Left click',mouse_right:'Right click',mouse_middle:'Middle click',mouse_forward:'Forward',mouse_back:'Back',mouse_double_click:'Double click',scroll_up:'Scroll up',scroll_down:'Scroll down',scroll_left:'Scroll left',scroll_right:'Scroll right'};
 const CODE2NAME = {Enter:'enter',Escape:'esc',Backspace:'backspace',Tab:'tab',Space:'space',Minus:'minus',Equal:'equal',BracketLeft:'left_bracket',BracketRight:'right_bracket',Backslash:'backslash',Semicolon:'semicolon',Quote:'quote',Backquote:'grave',Comma:'comma',Period:'period',Slash:'slash',CapsLock:'caps_lock',PrintScreen:'print_screen',ScrollLock:'scroll_lock',Pause:'pause',Insert:'insert',Home:'home',PageUp:'page_up',Delete:'delete',End:'end',PageDown:'page_down',ArrowRight:'right',ArrowLeft:'left',ArrowDown:'down',ArrowUp:'up',NumLock:'num_lock',NumpadDivide:'kp_slash',NumpadMultiply:'kp_asterisk',NumpadSubtract:'kp_minus',NumpadAdd:'kp_plus',NumpadEnter:'kp_enter',Numpad0:'kp_0',NumpadDecimal:'kp_period',IntlBackslash:'non_us_backslash',ContextMenu:'application',ControlLeft:'left_ctrl',ShiftLeft:'left_shift',AltLeft:'left_alt',MetaLeft:'left_gui',ControlRight:'right_ctrl',ShiftRight:'right_shift',AltRight:'right_alt',MetaRight:'right_gui'};
@@ -269,9 +270,13 @@ function codeToName(code){
   if ((m = /^F(\d+)$/.exec(code))) return 'f' + m[1];
   return null;
 }
+// Super Buttons: two per rear port, k1/k2 on port A ... k7/k8 on Y; the odd one is the pair's A button.
+const PORTS = ['A','B','X','Y'];
+function superOf(n){ const m = /^k([1-8])$/.exec(n || ''); return m ? {port:(+m[1]-1) >> 1, btn:(+m[1] % 2) ? 'A' : 'B'} : null; }
 function prettyKey(n){
   if (!n) return '';
   if (PRETTY[n]) return PRETTY[n];
+  const s = superOf(n); if (s) return 'Super ' + s.btn + ' · port ' + PORTS[s.port];
   if (/^f\d+$/.test(n) || n.length === 1) return n.toUpperCase();
   if (n.startsWith('kp_')) return 'Keypad ' + n.slice(3);
   return n.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -302,7 +307,7 @@ const RATES = [250,500,1000,2000,4000,8000];
 /* --------------------------------------------------------------- state ---- */
 let state = {keyboard:null, mouse:null, errors:{}};
 let demo = false;
-const ui = {device:'keyboard', kbKey:null, kbTab:'key', captured:null, mod:'', mouseBtn:null, mouseTab:'function', fnSearch:'', linkY:true,
+const ui = {device:'keyboard', kbKey:null, kbTab:'key', port:0, captured:null, mod:'', mouseBtn:null, mouseTab:'function', fnSearch:'', linkY:true,
             macro:null, recording:false, lastEvt:0};
 
 async function loadState(){
@@ -406,7 +411,9 @@ function renderKeyboardView(){
     '<div class="panel"><h2>Keyboard · click a key</h2>' +
       '<div class="status"><span>Model <b>' + esc(kb.product) + '</b></span><span>Rev <b>' + esc(kb.revision || '?') + '</b></span><span>Profile <b>' + esc(kb.profile_name || 'unnamed') + '</b></span><span>Remapped <b>' + Object.keys(kb.mappings).length + '</b></span><span>Macros <b>' + Object.keys(kb.macros).length + '</b></span></div>' +
       '<div class="stage-kb">' + keyboardHtml(kb, selected) + '</div>' +
-      '<div class="super"><div class="desc"><b>Super Buttons</b>The two big arcade buttons on the 3.5 mm port. Map them to anything.</div>' + superHtml(kb, 'super_a', 'A', selected) + superHtml(kb, 'super_b', 'B', selected) + '</div>' +
+      '<div class="super"><div class="desc"><b>Super Buttons</b>The arcade buttons plug into the four ports at the back, two buttons per port. Pick a port:' +
+        '<div class="seg ports">' + PORTS.map((p, i) => '<button data-act="port" data-arg="' + i + '" aria-pressed="' + (ui.port === i) + '"' + (portUsed(kb, i) ? ' class="used" title="Port ' + p + ' has remaps or macros"' : '') + '>' + p + '</button>').join('') + '</div></div>' +
+        superHtml(kb, 'k' + (2 * ui.port + 2), 'B', selected) + superHtml(kb, 'k' + (2 * ui.port + 1), 'A', selected) + '</div>' +
     '</div>' +
     '<aside class="panel inspector" id="kb-insp">' + kbInspectorHtml(kb) + '</aside>' +
     '<div class="panel full"><h2>Keyboard settings</h2>' + kbSettingsHtml(kb) + '</div>';
@@ -414,7 +421,6 @@ function renderKeyboardView(){
 }
 function keyHtml(kb, k, selected){
   const code = KEYS[k.n]; const map = kb.mappings[code]; const mac = kb.macros[code];
-  if (k.n === 'fn') return '<button class="key mod fnkey" style="--w:' + k.w + '" disabled title="Fn is a layer key and cannot be remapped"><span class="leg">Fn</span></button>';
   const leg = LEGEND[k.n] !== undefined ? LEGEND[k.n] : k.n.toUpperCase();
   return '<button class="key ' + k.c + (map ? ' mapped' : '') + '" style="--w:' + k.w + '" data-act="selkey" data-arg="' + code + '" aria-pressed="' + (selected === code) + '" title="' + esc(prettyKey(k.n)) + (map ? ' → ' + esc(prettyTarget(map.target)) : '') + '">' +
     '<span class="leg">' + esc(leg) + '</span>' + (map ? '<span class="map">' + esc(shortTarget(map.target)) + '</span>' : '') + (mac ? '<span class="mc" title="Macro: ' + esc(mac.name) + '">M</span>' : '') + '</button>';
@@ -422,6 +428,7 @@ function keyHtml(kb, k, selected){
 function keyboardHtml(kb, selected){
   return '<div class="kbd" id="kbd">' + LAYOUT.map(row => '<div class="row">' + row.map(k => k.gap ? '<div class="gap" style="--w:' + k.gap + '"></div>' : keyHtml(kb, k, selected)).join('') + '</div>').join('') + '</div>';
 }
+function portUsed(kb, i){ return [2 * i + 1, 2 * i + 2].some(n => { const c = KEYS['k' + n]; return kb.mappings[c] || kb.macros[c]; }); }
 function superHtml(kb, name, letter, selected){
   const code = KEYS[name], map = kb.mappings[code], mac = kb.macros[code];
   return '<button class="sbtn" data-act="selkey" data-arg="' + code + '" aria-pressed="' + (selected === code) + '" title="' + esc(prettyKey(name)) + '">' + letter + (map ? '<span class="map">' + esc(shortTarget(map.target)) + '</span>' : '') + (mac ? '<span class="mc">M</span>' : '') + '</button>';
@@ -461,7 +468,7 @@ function kbInspectorHtml(kb){
     body += macroEditorHtml('keyboard', code, mac);
   } else {
     body += '<div class="tiles">' +
-      '<button class="tile" data-act="kbmap" data-arg="fn" aria-pressed="' + (map && map.target === 'fn') + '">Fn layer<small>Acts as a second Fn key</small></button>' +
+      '<button class="tile" data-act="kbmap" data-arg="fn" aria-pressed="' + (map && map.target === 'fn') + '">Fn layer<small>Works as an Fn key</small></button>' +
       '<button class="tile" data-act="kbmap" data-arg="none" aria-pressed="' + (map && map.target === 'none') + '">Disable key<small>Presses do nothing</small></button>' +
       '<button class="tile" data-act="kbunmap">Restore default<small>Back to ' + esc(isExtra ? 'unassigned' : prettyKey(name)) + '</small></button>' +
       '</div>';
@@ -660,7 +667,8 @@ document.addEventListener('click', async e => {
   if (act === 'dev'){ ui.device = arg; ui.recording = false; render(); }
   else if (act === 'refresh'){ toast('Reading devices…'); await loadState(); }
   else if (act === 'theme'){ const cur = document.documentElement.getAttribute('data-theme'); const next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark' : (matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'); document.documentElement.setAttribute('data-theme', next); try{ localStorage.setItem('rc-theme', next); }catch(_){} }
-  else if (act === 'selkey'){ ui.kbKey = +arg; ui.captured = null; ui.mod = ''; ui.macro = null; ui.recording = false; render(); }
+  else if (act === 'port'){ ui.port = +arg; render(); }
+  else if (act === 'selkey'){ ui.kbKey = +arg; const s = superOf(KEY_NAME[ui.kbKey]); if (s) ui.port = s.port; ui.captured = null; ui.mod = ''; ui.macro = null; ui.recording = false; render(); }
   else if (act === 'kbtab'){ ui.kbTab = arg; ui.recording = false; renderInspector(); if (arg === 'key') { const c = $('#capture'); if (c) c.focus(); } }
   else if (act === 'mod'){ ui.mod = arg; renderInspector(); }
   else if (act === 'kbmap'){ if (!arg) return; const ok = await act_('keyboard', 'map', {key:ui.kbKey, target:arg}, prettyKey(KEY_NAME[ui.kbKey]) + ' → ' + prettyTarget(arg)); if (ok){ ui.captured = null; ui.mod = ''; renderInspector(); } }
@@ -734,7 +742,7 @@ document.addEventListener('focusin', e => { if (e.target.id === 'capture' && !ui
 try{ const t = localStorage.getItem('rc-theme'); if (t) document.documentElement.setAttribute('data-theme', t); }catch(_){}
 { const h = new URLSearchParams(location.hash.replace(/^#/, '').replace(/^mouse$/, 'device=mouse'));
   if (h.get('device') === 'mouse') ui.device = 'mouse';
-  if (h.get('key')){ ui.device = 'keyboard'; ui.kbKey = +h.get('key'); }
+  if (h.get('key')){ ui.device = 'keyboard'; ui.kbKey = +h.get('key'); const s = superOf(KEY_NAME[ui.kbKey]); if (s) ui.port = s.port; }
   if (h.get('button')){ ui.device = 'mouse'; ui.mouseBtn = +h.get('button'); ui.mouseTab = h.get('tab') || 'function'; }
   if (h.get('tab') && ui.device === 'keyboard') ui.kbTab = h.get('tab'); }
 loadState();

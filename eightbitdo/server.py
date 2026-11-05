@@ -347,7 +347,7 @@ def demo_state() -> Dict[str, Any]:
             "profile_name": "Sample profile", "volume": 3, "feature": 0,
             "mappings": {
                 "57": kb_map(57, "left_ctrl"), "71": kb_map(71, "media:play_pause"),
-                "109": kb_map(109, "mouse:left"), "108": kb_map(108, "mouse:right"),
+                "116": kb_map(116, "mouse:left"), "117": kb_map(117, "mouse:right"),
             },
             "macros": {"115": {"key": 115, "key_name": "f24", "name": "Paste as plain", "cycles": 1, "interval_ms": 0,
                                 "steps": ["press:left_ctrl", "press:left_shift", "press:v", "release:v", "release:left_shift", "release:left_ctrl"]}},

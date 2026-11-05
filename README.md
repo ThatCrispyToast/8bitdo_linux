@@ -20,7 +20,7 @@ Keyboard (USB `2dc8:5200`, also `5201` via the 2.4 GHz receiver):
   (volume, play/pause, mail, calculator, brightness...) or to a mouse action
   (clicks, scroll)
 - record up to 8 macros (200 key events each, delays, repeat count / hold,
-  interval) bound to keys, including the Super Buttons (`super_a`, `super_b`)
+  interval) bound to keys, including the Super Buttons (`k1`..`k8`)
 - set the volume level (1..5), profile name, factory reset
 - dump / apply the configuration as JSON
 
@@ -103,11 +103,11 @@ demo.html` writes a standalone copy of the page with sample data.
 8bitdo-cfg keyboard show              # current configuration
 8bitdo-cfg keyboard map caps_lock left_ctrl
 8bitdo-cfg keyboard map scroll_lock media:play_pause
-8bitdo-cfg keyboard map super_a mouse:left
+8bitdo-cfg keyboard map k1 mouse:left
 8bitdo-cfg keyboard map f12 shift+f12
 8bitdo-cfg keyboard unmap caps_lock
 8bitdo-cfg keyboard macro f24 --name "copy" --repeat 1 tap:ctrl+c delay:50 tap:ctrl+v
-8bitdo-cfg keyboard macro super_b --name "spam" --repeat hold --interval 100 tap:space
+8bitdo-cfg keyboard macro k2 --name "spam" --repeat hold --interval 100 tap:space
 8bitdo-cfg keyboard macro-clear f24
 8bitdo-cfg keyboard volume 3
 8bitdo-cfg keyboard profile-name "work"
@@ -145,7 +145,10 @@ slash caps_lock print_screen scroll_lock pause insert home page_up delete end
 page_down right left down up num_lock kp_1..kp_0 kp_slash kp_asterisk kp_minus
 kp_plus kp_enter kp_period left_ctrl left_shift left_alt left_gui right_ctrl
 right_shift right_alt right_gui application`, plus the keyboard's extra
-physical keys `super_a super_b` (Super Buttons) and `k1`..`k8`.
+physical keys: `super_b super_a` are the red B and A keys between Right Alt and
+Right Ctrl (the names predate knowing that), and `k1`..`k8` are the Super Buttons
+on the four rear ports: `k1 k2` on port A, `k3 k4` on B, `k5 k6` on X, `k7 k8`
+on Y, the odd one being the pair's A button.
 
 ## Python API
 
