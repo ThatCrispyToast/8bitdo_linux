@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eightbitdo"
+version = "0.1.0"
+description = "Configure the 8BitDo Retro 87 Mechanical Keyboard and Retro R8 Mouse on Linux"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+8bitdo-cfg = "eightbitdo.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["eightbitdo*"]
+
+[tool.setuptools.package-data]
+eightbitdo = ["ui/*.html", "ui/*.svg", "ui/*.desktop", "ui/fonts/*.woff2", "ui/fonts/LICENSE.txt"]

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Retro Config
+GenericName=8BitDo keyboard and mouse settings
+Comment=Configure the 8BitDo Retro 87 keyboard and Retro R8 mouse
+Exec=8bitdo-cfg ui
+Icon=eightbitdo
+Terminal=false
+Categories=Settings;HardwareSettings;Utility;
+Keywords=8BitDo;keyboard;mouse;DPI;macro;

@@ -1,0 +1,4 @@
+# 8BitDo Retro 87 Mechanical Keyboard (5200 wired / 5201 receiver) and
+# Retro R8 Mouse (5205 wired / 5206 receiver): let the logged-in user talk to
+# the vendor HID interfaces used for configuration.
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="5200|5201|5205|5206", MODE="0660", TAG+="uaccess"

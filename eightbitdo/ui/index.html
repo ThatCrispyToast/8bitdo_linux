@@ -1,0 +1,710 @@
+<title>Retro Config</title>
+<style>
+/*__FONTS__*/
+:root{
+  --plastic:#d3cfc6; --paper:#f1efe9; --paper-2:#e5e1d9; --ink:#1d1c1a; --ink-soft:#5a5751; --line:#a8a399;
+  --dark:#3e3d3f; --dark-2:#2c2b2d; --on-dark:#f1efe9; --on-dark-soft:#b9b5ad;
+  --red:#d7261e; --red-ink:#a3170f; --on-red:#fff8f6; --good:#2f8f4e; --warn:#c98a12;
+  --case:#bdb8ae; --key-light:#e3dfd7; --key-light-edge:#b3aea4; --key-dark:#4c4b4e; --key-dark-edge:#222124;
+  --key-text:#1d1c1a; --key-text-dark:#f1efe9; --key-ink:#1d1c1a;
+  --shadow:3px 3px 0 var(--ink); --shadow-sm:2px 2px 0 var(--ink); --focus:0 0 0 3px var(--paper),0 0 0 5px var(--red);
+  --font-pixel:'Press Start 2P','VT323',monospace;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --plastic:#232325; --paper:#303033; --paper-2:#3b3b3f; --ink:#ecebe6; --ink-soft:#b1aea7; --line:#57565c;
+    --dark:#151517; --dark-2:#0e0e0f; --on-dark:#ecebe6; --on-dark-soft:#a6a39c;
+    --red:#e93a30; --red-ink:#ff8d85; --on-red:#fff; --good:#5fca7e; --warn:#e6ad45; --case:#4a494d;
+    --shadow:3px 3px 0 #0a0a0b; --shadow-sm:2px 2px 0 #0a0a0b; --focus:0 0 0 3px var(--paper),0 0 0 5px var(--red);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --plastic:#232325; --paper:#303033; --paper-2:#3b3b3f; --ink:#ecebe6; --ink-soft:#b1aea7; --line:#57565c;
+  --dark:#151517; --dark-2:#0e0e0f; --on-dark:#ecebe6; --on-dark-soft:#a6a39c;
+  --red:#e93a30; --red-ink:#ff8d85; --on-red:#fff; --good:#5fca7e; --warn:#e6ad45; --case:#4a494d;
+  --shadow:3px 3px 0 #0a0a0b; --shadow-sm:2px 2px 0 #0a0a0b; --focus:0 0 0 3px var(--paper),0 0 0 5px var(--red);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{margin:0;background:var(--plastic);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:none;box-shadow:var(--focus)}
+h1,h2,h3{margin:0;font-weight:600}
+.px{font-family:var(--font-pixel);font-size:9px;line-height:1.7;text-transform:uppercase;letter-spacing:0}
+.px.lg{font-size:12px}
+.muted{color:var(--ink-soft)}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+#app{max-width:1400px;margin:0 auto;padding:18px 22px 80px}
+
+/* ---- top bar: dark grey console plastic with two power LEDs -------------- */
+.topbar{display:flex;align-items:center;gap:22px;flex-wrap:wrap;background:var(--dark);color:var(--on-dark);border:2px solid var(--ink);box-shadow:var(--shadow);padding:12px 16px 12px 18px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand .mark{width:26px;height:26px;background:var(--red);border:2px solid var(--ink);box-shadow:inset -4px -4px 0 rgba(0,0,0,.25)}
+.brand .name{font-family:var(--font-pixel);font-size:13px;line-height:1.2}
+.brand .name small{display:block;font-family:var(--font-body);font-size:11px;font-weight:500;color:var(--on-dark-soft);margin-top:5px;letter-spacing:.04em;text-transform:uppercase}
+.devtabs{display:flex;gap:10px;margin-left:auto}
+.devtab{display:flex;align-items:center;gap:10px;font-family:var(--font-pixel);font-size:9px;text-transform:uppercase;padding:11px 14px;background:var(--dark-2);color:var(--on-dark-soft);border:2px solid var(--ink);box-shadow:var(--shadow-sm)}
+.devtab[aria-selected="true"]{background:var(--paper);color:var(--ink)}
+.devtab .led{width:10px;height:10px;border:2px solid var(--ink);background:#6a6a6a;flex:none}
+.devtab .led.on{background:var(--good);box-shadow:0 0 6px var(--good)}
+.devtab .led.off{background:#7a3a36}
+.topactions{display:flex;gap:10px}
+
+.btn{font-family:var(--font-pixel);font-size:9px;text-transform:uppercase;padding:10px 12px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);box-shadow:var(--shadow-sm);line-height:1.6;white-space:nowrap}
+.btn:hover{background:var(--paper-2)}
+.btn:active,.btn.pressed{transform:translate(2px,2px);box-shadow:none}
+.btn.red{background:var(--red);color:var(--on-red)} .btn.red:hover{background:var(--red-ink)}
+.btn.dark{background:var(--dark);color:var(--on-dark)} .btn.dark:hover{background:var(--dark-2)}
+.btn.ghost{box-shadow:none;background:transparent} .btn.ghost:hover{background:var(--paper-2)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:var(--shadow-sm)}
+.btn.sm{padding:7px 9px;font-size:8px}
+
+/* ---- banner ---- */
+.banner{margin-top:16px;padding:12px 16px;border:2px solid var(--ink);background:var(--paper);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.banner .tag{background:var(--red);color:var(--on-red);padding:4px 8px}
+.banner code{font-family:var(--font-mono);background:var(--paper-2);padding:2px 6px}
+
+/* ---- view layout ---- */
+main{margin-top:20px}
+.view{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;align-items:start}
+.panel{background:var(--paper);border:2px solid var(--ink);box-shadow:var(--shadow);padding:18px}
+.panel h2{font-family:var(--font-pixel);font-size:10px;text-transform:uppercase;line-height:1.7;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:10px;height:10px;background:var(--red);border:2px solid var(--ink);flex:none}
+.inspector{position:sticky;top:18px}
+.full{grid-column:1 / -1}
+.lead{font-size:15px;line-height:1.5}
+.empty{padding:26px 8px;color:var(--ink-soft);text-align:center}
+.empty .px{margin-bottom:12px;color:var(--ink)}
+
+/* ---- keyboard illustration: N Edition keycaps on a grey case ---- */
+.stage-kb{overflow-x:auto}
+.kbd{--u:44px;--g:6px;display:inline-flex;flex-direction:column;gap:var(--g);padding:16px;background:var(--case);border:2px solid var(--key-ink);border-radius:8px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.18),var(--shadow)}
+.row{display:flex;gap:var(--g)}
+.key,.gap{width:calc(var(--w,1) * (var(--u) + var(--g)) - var(--g));height:var(--u);flex:none}
+.key{position:relative;padding:0;border:2px solid var(--key-ink);border-radius:4px;background:var(--key-light);color:var(--key-text);box-shadow:inset 0 -4px 0 var(--key-light-edge);font-family:var(--font-body);font-weight:600;font-size:11px;line-height:1.1;text-align:left;cursor:pointer;transition:transform .06s}
+.key .leg{position:absolute;left:5px;top:4px;right:4px;white-space:pre}
+.key.mod{background:var(--key-dark);color:var(--key-text-dark);box-shadow:inset 0 -4px 0 var(--key-dark-edge)}
+.key.accent{background:var(--red);color:var(--on-red);box-shadow:inset 0 -4px 0 var(--red-ink)}
+.key:hover{transform:translateY(-2px)}
+.key[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:2px;transform:translateY(-2px)}
+.key.mapped .leg{top:3px}
+.key .map{position:absolute;left:2px;right:2px;bottom:3px;font-size:9px;font-weight:600;background:var(--red);color:var(--on-red);padding:1px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-mono)}
+.key .mc{position:absolute;top:2px;right:2px;width:13px;height:13px;background:var(--red);color:var(--on-red);font-family:var(--font-pixel);font-size:7px;line-height:13px;text-align:center;border:1px solid var(--key-ink)}
+.key:disabled{cursor:not-allowed;opacity:.85}
+.key:disabled:hover{transform:none}
+.super{display:flex;align-items:center;gap:22px;margin-top:16px;padding:14px 18px;background:var(--case);border:2px solid var(--key-ink);border-radius:8px;box-shadow:var(--shadow)}
+.super .desc{color:var(--key-ink)}
+.super .desc b{display:block;font-family:var(--font-pixel);font-size:8px;text-transform:uppercase;margin-bottom:4px}
+.sbtn{position:relative;width:66px;height:66px;border-radius:50%;border:3px solid var(--key-ink);background:var(--red);color:var(--on-red);font-family:var(--font-pixel);font-size:14px;box-shadow:inset 0 -8px 0 var(--red-ink),0 3px 0 var(--key-ink);flex:none}
+.sbtn:hover{transform:translateY(-2px)} .sbtn[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:3px}
+.sbtn .map{position:absolute;left:50%;transform:translateX(-50%);bottom:-26px;font-size:9px;font-family:var(--font-mono);font-weight:600;background:var(--red);color:var(--on-red);padding:1px 4px;white-space:nowrap;border:1px solid var(--key-ink)}
+.sbtn .mc{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:var(--key-ink);color:#fff;font-family:var(--font-pixel);font-size:7px;line-height:16px;text-align:center;border:1px solid var(--key-ink)}
+
+/* ---- inspector bits ---- */
+.selhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.selhead .kname{font-family:var(--font-pixel);font-size:12px;line-height:1.5}
+.selhead .knum{font-family:var(--font-mono);color:var(--ink-soft);font-size:12px}
+.current{margin:0 0 14px;padding:10px 12px;background:var(--paper-2);border-left:4px solid var(--red)}
+.current b{font-weight:600}
+.tabs{display:flex;flex-wrap:wrap;gap:0;margin-bottom:14px;border:2px solid var(--ink)}
+.tabs button{flex:1;padding:9px 6px;border:0;background:var(--paper);font-family:var(--font-pixel);font-size:8px;text-transform:uppercase;border-right:2px solid var(--ink)}
+.tabs button:last-child{border-right:0}
+.tabs button[aria-selected="true"]{background:var(--dark);color:var(--on-dark)}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tile{text-align:left;padding:9px 10px;border:2px solid var(--ink);background:var(--paper-2);font-weight:500;font-size:13px;line-height:1.3}
+.tile small{display:block;color:var(--ink-soft);font-weight:400;font-size:11px;margin-top:2px}
+.tile:hover{border-color:var(--red)}
+.tile[aria-pressed="true"]{background:var(--red);color:var(--on-red)} .tile[aria-pressed="true"] small{color:var(--on-red);opacity:.85}
+.tiles.three{grid-template-columns:repeat(3,1fr)}
+.capture{border:2px dashed var(--ink);padding:16px 12px;text-align:center;background:var(--paper-2);cursor:text;min-height:64px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.capture[data-live="true"]{border-style:solid;border-color:var(--red)}
+.capture .got{font-family:var(--font-pixel);font-size:11px}
+.field{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.field>label,.lbl{font-family:var(--font-pixel);font-size:8px;text-transform:uppercase;color:var(--ink-soft)}
+.inp{border:2px solid var(--ink);background:var(--paper);padding:8px 10px;font-family:var(--font-mono);font-size:13px;width:100%;min-width:0}
+.inp.sm{padding:5px 8px;font-size:12px}
+select.inp{font-family:var(--font-body)}
+.row-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.seg{display:inline-flex;border:2px solid var(--ink);box-shadow:var(--shadow-sm)}
+.seg button{padding:8px 12px;border:0;border-right:2px solid var(--ink);background:var(--paper);font-family:var(--font-mono);font-size:13px;font-weight:500;min-width:44px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--dark);color:var(--on-dark)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.switch .track{width:46px;height:24px;border:2px solid var(--ink);background:var(--paper-2);position:relative;box-shadow:var(--shadow-sm)}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--dark);transition:left .1s}
+.switch[aria-checked="true"] .track{background:var(--red)} .switch[aria-checked="true"] .track::after{left:24px;background:var(--paper)}
+.modrow{display:flex;gap:6px;flex-wrap:wrap}
+.modrow .mod{padding:6px 9px;border:2px solid var(--ink);background:var(--paper-2);font-family:var(--font-mono);font-size:12px}
+.modrow .mod[aria-pressed="true"]{background:var(--dark);color:var(--on-dark)}
+.hint{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.4}
+.divider{height:2px;background:var(--line);margin:16px 0;opacity:.6}
+
+/* ---- macro editor ---- */
+.steps{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow:auto;border:2px solid var(--ink);padding:8px;background:var(--paper-2)}
+.step{display:grid;grid-template-columns:22px 92px minmax(0,1fr) 28px;gap:6px;align-items:center}
+.step .n{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);text-align:right}
+.step .x{border:2px solid var(--ink);background:var(--paper);width:28px;height:28px;font-family:var(--font-pixel);font-size:8px;padding:0}
+.steps .none{color:var(--ink-soft);font-size:12px;padding:6px}
+.rec{background:var(--red);color:var(--on-red)} .rec[data-on="true"]{animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+@media (prefers-reduced-motion:reduce){.rec[data-on="true"]{animation:none;outline:3px solid var(--red)}.key,.sbtn{transition:none}}
+
+/* ---- settings grids ---- */
+.settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.setting{display:flex;flex-direction:column;gap:8px}
+.setting .name{font-weight:600}
+.setting .desc{font-size:12px;color:var(--ink-soft);line-height:1.4}
+.inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* ---- mouse ---- */
+.stage-mouse{display:grid;grid-template-columns:300px minmax(0,1fr);gap:22px;align-items:start}
+.mouse-svg{width:100%;max-width:300px;display:block}
+.mouse-svg .part{cursor:pointer}
+.mouse-svg .part:hover .fill{stroke:var(--red);stroke-width:4}
+.mouse-svg .part[aria-pressed="true"] .fill{stroke:var(--red);stroke-width:5}
+.mouse-svg .static .fill{cursor:default}
+.callouts{display:flex;flex-direction:column;gap:8px}
+.callout{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;padding:10px 12px;border:2px solid var(--ink);background:var(--paper-2)}
+.callout:hover{border-color:var(--red)}
+.callout[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:1px}
+.callout .idx{font-family:var(--font-pixel);font-size:9px;background:var(--dark);color:var(--on-dark);padding:6px 0;text-align:center;border:2px solid var(--ink)}
+.callout .fn{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft)}
+.callout .fn b{color:var(--ink);font-weight:600}
+.callout .chip{font-family:var(--font-pixel);font-size:7px;text-transform:uppercase;background:var(--red);color:var(--on-red);padding:5px 6px;border:1px solid var(--ink)}
+.callout.static{opacity:.75;cursor:default} .callout.static:hover{border-color:var(--ink)}
+.fnlist{max-height:380px;overflow:auto;border:2px solid var(--ink);background:var(--paper-2)}
+.fnlist .grp{font-family:var(--font-pixel);font-size:7px;text-transform:uppercase;padding:8px 10px 4px;color:var(--ink-soft);position:sticky;top:0;background:var(--paper-2)}
+.fnlist button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:7px 10px;border:0;border-top:1px solid var(--line);background:transparent;font-size:13px}
+.fnlist button:hover{background:var(--paper)}
+.fnlist button[aria-pressed="true"]{background:var(--red);color:var(--on-red)}
+.fnlist button .v{font-family:var(--font-mono);font-size:11px;opacity:.6}
+.dpi{display:grid;grid-template-columns:auto auto 1fr 84px;gap:8px 12px;align-items:center}
+.dpi .hd{font-family:var(--font-pixel);font-size:7px;text-transform:uppercase;color:var(--ink-soft)}
+.dpi input[type=range]{width:100%;accent-color:var(--red)}
+.dpi input[type=checkbox],.dpi input[type=radio]{accent-color:var(--red);width:18px;height:18px;margin:0}
+.dpi .slot{font-family:var(--font-mono);font-size:12px}
+.wheelspeed{display:flex;align-items:center;gap:12px}
+.wheelspeed input[type=range]{flex:1;accent-color:var(--red)}
+.status{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-bottom:12px}
+.status b{color:var(--ink);font-weight:500}
+
+/* ---- toast ---- */
+#toast{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:10}
+.tst{background:var(--dark);color:var(--on-dark);border:2px solid var(--ink);box-shadow:var(--shadow);padding:10px 14px;font-size:13px;max-width:360px}
+.tst.err{background:var(--red);color:var(--on-red)}
+.tst .px{display:block;margin-bottom:4px;font-size:7px;opacity:.8}
+
+@media (max-width:1000px){.view{grid-template-columns:1fr}.inspector{position:static}.stage-mouse{grid-template-columns:1fr}}
+</style>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><div class="mark" aria-hidden="true"></div>
+      <h1 class="name">RETRO CONFIG<small>8BitDo Retro 87 keyboard · Retro R8 mouse</small></h1></div>
+    <nav class="devtabs" aria-label="Device">
+      <button class="devtab" data-act="dev" data-arg="keyboard" aria-selected="true"><span class="led" id="led-kb"></span>Keyboard</button>
+      <button class="devtab" data-act="dev" data-arg="mouse" aria-selected="false"><span class="led" id="led-mouse"></span>Mouse</button>
+    </nav>
+    <div class="topactions">
+      <button class="btn" data-act="refresh" title="Read both devices again">Refresh</button>
+      <button class="btn" data-act="theme" title="Switch light / dark">Theme</button>
+    </div>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+  <main>
+    <section id="view-keyboard" class="view"></section>
+    <section id="view-mouse" class="view" hidden></section>
+  </main>
+</div>
+<div id="toast" aria-live="polite"></div>
+
+<script>
+/*__META__*/
+(function(){
+'use strict';
+const META = window.META;
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* ---------------------------------------------------------------- data ---- */
+const KEYS = {}; META.keys.forEach(k => KEYS[k.name] = k.code);
+const KEY_NAME = {}; META.keys.forEach(k => KEY_NAME[k.code] = k.name);
+Object.entries(META.extra_keys).forEach(([n,c]) => { KEYS[n] = c; KEY_NAME[c] = n; });
+const MODS = ['left_ctrl','left_shift','left_alt','left_gui','right_ctrl','right_shift','right_alt','right_gui'];
+
+/* 87-key TKL layout: [name, width, class] ; {gap:n} */
+const L = (n,w,c) => ({n, w:w||1, c:c||''}), G = w => ({gap:w});
+const LAYOUT = [
+  [L('esc',1,'accent'),G(1),L('f1'),L('f2'),L('f3'),L('f4'),G(.5),L('f5'),L('f6'),L('f7'),L('f8'),G(.5),L('f9'),L('f10'),L('f11'),L('f12'),G(.5),L('print_screen',1,'mod'),L('scroll_lock',1,'mod'),L('pause',1,'mod')],
+  [L('grave'),L('1'),L('2'),L('3'),L('4'),L('5'),L('6'),L('7'),L('8'),L('9'),L('0'),L('minus'),L('equal'),L('backspace',2,'mod'),G(.5),L('insert',1,'mod'),L('home',1,'mod'),L('page_up',1,'mod')],
+  [L('tab',1.5,'mod'),L('q'),L('w'),L('e'),L('r'),L('t'),L('y'),L('u'),L('i'),L('o'),L('p'),L('left_bracket'),L('right_bracket'),L('backslash',1.5),G(.5),L('delete',1,'mod'),L('end',1,'mod'),L('page_down',1,'mod')],
+  [L('caps_lock',1.75,'mod'),L('a'),L('s'),L('d'),L('f'),L('g'),L('h'),L('j'),L('k'),L('l'),L('semicolon'),L('quote'),L('enter',2.25,'mod')],
+  [L('left_shift',2.25,'mod'),L('z'),L('x'),L('c'),L('v'),L('b'),L('n'),L('m'),L('comma'),L('period'),L('slash'),L('right_shift',2.75,'mod'),G(1.5),L('up',1,'mod')],
+  [L('left_ctrl',1.25,'mod'),L('left_gui',1.25,'mod'),L('left_alt',1.25,'mod'),L('space',6.25),L('right_alt',1.25,'mod'),L('fn',1.25,'mod fnkey'),L('application',1.25,'mod'),L('right_ctrl',1.25,'mod'),G(.5),L('left',1,'mod'),L('down',1,'mod'),L('right',1,'mod')],
+];
+const LEGEND = {esc:'Esc',grave:'~\n`','1':'!\n1','2':'@\n2','3':'#\n3','4':'$\n4','5':'%\n5','6':'^\n6','7':'&\n7','8':'*\n8','9':'(\n9','0':')\n0',minus:'_\n-',equal:'+\n=',backspace:'Backspace',tab:'Tab',left_bracket:'{\n[',right_bracket:'}\n]',backslash:'|\n\\',caps_lock:'Caps',semicolon:':\n;',quote:'"\n\'',enter:'Enter',left_shift:'Shift',comma:'<\n,',period:'>\n.',slash:'?\n/',right_shift:'Shift',left_ctrl:'Ctrl',left_gui:'Win',left_alt:'Alt',space:'',right_alt:'Alt',fn:'Fn',application:'Menu',right_ctrl:'Ctrl',print_screen:'PrtSc',scroll_lock:'ScrLk',pause:'Pause',insert:'Ins',home:'Home',page_up:'PgUp',delete:'Del',end:'End',page_down:'PgDn',up:'▲',down:'▼',left:'◀',right:'▶'};
+const PRETTY = {esc:'Esc',grave:'` (grave)',minus:'- (minus)',equal:'= (equal)',left_bracket:'[ (left bracket)',right_bracket:'] (right bracket)',backslash:'\\ (backslash)',semicolon:'; (semicolon)',quote:"' (quote)",comma:', (comma)',period:'. (period)',slash:'/ (slash)',application:'Menu',left_gui:'Left Win',right_gui:'Right Win',super_a:'Super Button A',super_b:'Super Button B',kp_slash:'Keypad /',kp_asterisk:'Keypad *',kp_minus:'Keypad -',kp_plus:'Keypad +',kp_period:'Keypad .',non_us_hash:'Non-US #',non_us_backslash:'Non-US \\'};
+const MEDIA_PRETTY = {volume_down:'Volume down',volume_up:'Volume up',mute:'Mute',play_pause:'Play / Pause',prev_track:'Previous track',next_track:'Next track',mail:'Mail',calculator:'Calculator',my_computer:'My Computer',browser_home:'Browser home',brightness_down:'Brightness down',brightness_up:'Brightness up'};
+const MOUSE_PRETTY = {mouse_left:'Left click',mouse_right:'Right click',mouse_middle:'Middle click',mouse_forward:'Forward',mouse_back:'Back',mouse_double_click:'Double click',scroll_up:'Scroll up',scroll_down:'Scroll down',scroll_left:'Scroll left',scroll_right:'Scroll right'};
+const CODE2NAME = {Enter:'enter',Escape:'esc',Backspace:'backspace',Tab:'tab',Space:'space',Minus:'minus',Equal:'equal',BracketLeft:'left_bracket',BracketRight:'right_bracket',Backslash:'backslash',Semicolon:'semicolon',Quote:'quote',Backquote:'grave',Comma:'comma',Period:'period',Slash:'slash',CapsLock:'caps_lock',PrintScreen:'print_screen',ScrollLock:'scroll_lock',Pause:'pause',Insert:'insert',Home:'home',PageUp:'page_up',Delete:'delete',End:'end',PageDown:'page_down',ArrowRight:'right',ArrowLeft:'left',ArrowDown:'down',ArrowUp:'up',NumLock:'num_lock',NumpadDivide:'kp_slash',NumpadMultiply:'kp_asterisk',NumpadSubtract:'kp_minus',NumpadAdd:'kp_plus',NumpadEnter:'kp_enter',Numpad0:'kp_0',NumpadDecimal:'kp_period',IntlBackslash:'non_us_backslash',ContextMenu:'application',ControlLeft:'left_ctrl',ShiftLeft:'left_shift',AltLeft:'left_alt',MetaLeft:'left_gui',ControlRight:'right_ctrl',ShiftRight:'right_shift',AltRight:'right_alt',MetaRight:'right_gui'};
+function codeToName(code){
+  if (CODE2NAME[code]) return CODE2NAME[code];
+  let m;
+  if ((m = /^Key([A-Z])$/.exec(code))) return m[1].toLowerCase();
+  if ((m = /^Digit(\d)$/.exec(code))) return m[1];
+  if ((m = /^Numpad(\d)$/.exec(code))) return 'kp_' + m[1];
+  if ((m = /^F(\d+)$/.exec(code))) return 'f' + m[1];
+  return null;
+}
+function prettyKey(n){
+  if (!n) return '';
+  if (PRETTY[n]) return PRETTY[n];
+  if (/^f\d+$/.test(n) || n.length === 1) return n.toUpperCase();
+  if (n.startsWith('kp_')) return 'Keypad ' + n.slice(3);
+  return n.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+function prettyTarget(t){
+  if (!t || t === '(default)') return 'Default';
+  if (t === 'fn') return 'Fn layer';
+  if (t === 'none') return 'Disabled';
+  if (t.startsWith('media:')) return 'Media · ' + (MEDIA_PRETTY[t.slice(6)] || t.slice(6));
+  if (t.startsWith('mouse:')) { const a = t.slice(6); return 'Mouse · ' + (MOUSE_PRETTY[a] || MOUSE_PRETTY['mouse_'+a] || a); }
+  if (t.includes('+')) { const [m,k] = t.split('+'); return prettyKey(m) + ' + ' + prettyKey(k); }
+  return prettyKey(t);
+}
+function shortTarget(t){ // for the keycap badge
+  if (t === 'fn') return 'Fn'; if (t === 'none') return 'off';
+  if (t.startsWith('media:')) return '♪ ' + (MEDIA_PRETTY[t.slice(6)] || t.slice(6));
+  if (t.startsWith('mouse:')) { const a = t.slice(6); return '🖱 ' + (MOUSE_PRETTY[a] || MOUSE_PRETTY['mouse_'+a] || a); }
+  if (t.includes('+')) { const [m,k] = t.split('+'); return LEGENDSHORT(m) + '+' + LEGENDSHORT(k); }
+  return LEGENDSHORT(t);
+}
+function LEGENDSHORT(n){ const l = LEGEND[n]; if (l && !l.includes('\n')) return l; if (l) return l.split('\n')[1]; return prettyKey(n); }
+const FN_BY_VALUE = {}; META.r8_functions.forEach(f => FN_BY_VALUE[f.value] = f);
+const R8_BTN_PRETTY = {right:'Right button',middle:'Wheel click',side_front:'Side button (front)',side_back:'Side button (back)',right_front:'Right side (front)',right_back:'Right side (back)',wheel_up:'Wheel up',wheel_down:'Wheel down',left:'Left button'};
+const MACRO_BTNS = META.r8_macro_buttons || [3, 4];
+function fnLabel(v){ if (v === 255) return 'Disabled'; const f = FN_BY_VALUE[v]; return f ? f.label : 'Function ' + v; }
+const RATES = [250,500,1000,2000,4000,8000];
+
+/* --------------------------------------------------------------- state ---- */
+let state = {keyboard:null, mouse:null, errors:{}};
+let demo = false;
+const ui = {device:'keyboard', kbKey:null, kbTab:'key', captured:null, mod:'', mouseBtn:null, mouseTab:'function', fnSearch:'', linkY:true,
+            macro:null, recording:false, lastEvt:0};
+
+async function loadState(){
+  try{
+    const r = await fetch('/api/state', {headers:{'X-Requested-With':'retro-config'}});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    state = await r.json(); demo = false;
+  }catch(e){
+    if (window.DEMO_STATE){ state = clone(window.DEMO_STATE); demo = true; }
+    else state = {keyboard:null, mouse:null, errors:{keyboard:'Cannot reach the local server', mouse:'Cannot reach the local server'}};
+  }
+  render();
+}
+async function act(device, action, body, okMsg){
+  if (demo){ demoApply(device, action, body); render(); toast(okMsg || 'Changed', 'Demo mode · kept in this page only'); return true; }
+  try{
+    const r = await fetch('/api/' + device + '/' + action, {method:'POST', headers:{'Content-Type':'application/json','X-Requested-With':'retro-config'}, body:JSON.stringify(body || {})});
+    const j = await r.json();
+    if (!j.ok){ toast(j.error || 'The device refused the change', 'Not saved', true); return false; }
+    state[device] = j[device]; render(); toast(okMsg || 'Saved to the ' + device); return true;
+  }catch(e){ toast('Lost the connection to 8bitdo-cfg ui. Is it still running?', 'Not saved', true); return false; }
+}
+function demoApply(device, action, b){
+  const s = state[device]; if (!s) return;
+  if (device === 'keyboard'){
+    const key = typeof b.key === 'number' ? b.key : KEYS[b.key];
+    if (action === 'map'){ if (b.target === key_name_of(key)) delete s.mappings[key]; else s.mappings[key] = {key, key_name:key_name_of(key), kind:7, value:[0,0,0,0], target:b.target}; }
+    else if (action === 'unmap') delete s.mappings[key];
+    else if (action === 'macro') s.macros[key] = {key, key_name:key_name_of(key), name:b.name, cycles: b.repeat === 'hold' ? 255 : +b.repeat, interval_ms:+b.interval_ms, steps:b.steps};
+    else if (action === 'macro_clear') delete s.macros[key];
+    else if (action === 'volume') s.volume = +b.level;
+    else if (action === 'name') s.profile_name = b.name;
+    else if (action === 'reset'){ s.mappings = {}; s.macros = {}; s.profile_name = ''; }
+  } else {
+    const btn = s.buttons.find(x => x.index === b.button || x.name === b.button);
+    if (action === 'dpi'){ const t = {enabled_mask:b.enabled_mask, values:b.values}; if (b.axis !== 'y') s.dpi_x = clone(t); if (b.axis !== 'x') s.dpi_y = clone(t); }
+    else if (action === 'dpi_slot') s.dpi_index = +b.slot;
+    else if (action === 'rate') s.rate.current = s.rate.values.indexOf(+b.hz);
+    else if (action === 'lod') s.lod = +b.mm;
+    else if (action === 'wheel_speed') s.wheel_speed = +b.value;
+    else if (action === 'wheel_direction') s.wheel_direction = b.reversed ? 1 : 0;
+    else if (action === 'left_hand') s.left_hand = b.on ? 1 : 0;
+    else if (action === 'button' && btn){ const f = META.r8_functions.find(x => x.name === b.function || x.value === b.function); btn.function = f ? f.value : 255; btn.function_name = f ? f.name : 'unused'; btn.macro_enabled = 0; }
+    else if (action === 'macro' && btn){ btn.macro_enabled = 1; s.macros = s.macros.filter(m => m.button !== btn.index); s.macros.push({button:btn.index, button_name:btn.name, name:b.name, cycles:b.repeat === 'hold' ? 65535 : +b.repeat, interval_ms:+b.interval_ms, slot:btn.index-2, steps:b.steps}); }
+    else if (action === 'macro_off' && btn){ btn.macro_enabled = 0; }
+    else if (action === 'name') s.profile_name = b.name;
+    else if (action === 'reset'){ Object.assign(s, clone(window.DEMO_STATE.mouse), {profile_name:''}); }
+  }
+}
+function key_name_of(code){ return KEY_NAME[code] || String(code); }
+
+/* -------------------------------------------------------------- toasts ---- */
+function toast(msg, eyebrow, err){
+  const el = document.createElement('div'); el.className = 'tst' + (err ? ' err' : '');
+  el.innerHTML = (eyebrow ? '<span class="px">' + esc(eyebrow) + '</span>' : '') + esc(msg);
+  $('#toast').appendChild(el); setTimeout(() => el.remove(), err ? 6000 : 3200);
+}
+
+/* -------------------------------------------------------------- render ---- */
+function render(){
+  const kb = state.keyboard, ms = state.mouse;
+  $('#led-kb').className = 'led ' + (kb ? 'on' : 'off');
+  $('#led-mouse').className = 'led ' + (ms ? 'on' : 'off');
+  document.querySelectorAll('.devtab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.arg === ui.device)));
+  const banner = $('#banner');
+  if (demo){ banner.hidden = false; banner.innerHTML = '<span class="tag px">Demo</span><span>No local server reached, so this page shows <b>sample settings</b>. Run <code>8bitdo-cfg ui</code> on the machine the devices are plugged into to control them for real.</span>'; }
+  else if (!kb && !ms){ banner.hidden = false; banner.innerHTML = '<span class="tag px">No device</span><span>Neither device was found. Plug them in over USB, then <b>Refresh</b>. If they are plugged in, make sure the udev rule from <code>udev/70-8bitdo.rules</code> is installed so <code>/dev/hidraw*</code> is readable.</span>'; }
+  else banner.hidden = true;
+  $('#view-keyboard').hidden = ui.device !== 'keyboard';
+  $('#view-mouse').hidden = ui.device !== 'mouse';
+  if (ui.device === 'keyboard') renderKeyboardView(); else renderMouseView();
+}
+
+/* ------------------------------------------------------------ keyboard ---- */
+function renderKeyboardView(){
+  const v = $('#view-keyboard'), kb = state.keyboard;
+  if (!kb){
+    v.innerHTML = '<div class="panel full"><h2>Keyboard</h2><div class="empty"><div class="px">Retro 87 not found</div>' + esc(state.errors.keyboard || '') + '<div class="hint">Connect the keyboard with its USB cable (or the 2.4 GHz receiver) and press Refresh.</div></div></div>';
+    return;
+  }
+  const selected = ui.kbKey;
+  v.innerHTML =
+    '<div class="panel"><h2>Keyboard · click a key</h2>' +
+      '<div class="status"><span>Model <b>' + esc(kb.product) + '</b></span><span>Rev <b>' + esc(kb.revision || '?') + '</b></span><span>Profile <b>' + esc(kb.profile_name || 'unnamed') + '</b></span><span>Remapped <b>' + Object.keys(kb.mappings).length + '</b></span><span>Macros <b>' + Object.keys(kb.macros).length + '</b></span></div>' +
+      '<div class="stage-kb">' + keyboardHtml(kb, selected) + '</div>' +
+      '<div class="super"><div class="desc"><b>Super Buttons</b>The two big arcade buttons on the 3.5 mm port. Map them to anything.</div>' + superHtml(kb, 'super_a', 'A', selected) + superHtml(kb, 'super_b', 'B', selected) + '</div>' +
+    '</div>' +
+    '<aside class="panel inspector" id="kb-insp">' + kbInspectorHtml(kb) + '</aside>' +
+    '<div class="panel full"><h2>Keyboard settings</h2>' + kbSettingsHtml(kb) + '</div>';
+  fitKeyboard();
+}
+function keyHtml(kb, k, selected){
+  const code = KEYS[k.n]; const map = kb.mappings[code]; const mac = kb.macros[code];
+  if (k.n === 'fn') return '<button class="key mod fnkey" style="--w:' + k.w + '" disabled title="Fn is a layer key and cannot be remapped"><span class="leg">Fn</span></button>';
+  const leg = LEGEND[k.n] !== undefined ? LEGEND[k.n] : k.n.toUpperCase();
+  return '<button class="key ' + k.c + (map ? ' mapped' : '') + '" style="--w:' + k.w + '" data-act="selkey" data-arg="' + code + '" aria-pressed="' + (selected === code) + '" title="' + esc(prettyKey(k.n)) + (map ? ' → ' + esc(prettyTarget(map.target)) : '') + '">' +
+    '<span class="leg">' + esc(leg) + '</span>' + (map ? '<span class="map">' + esc(shortTarget(map.target)) + '</span>' : '') + (mac ? '<span class="mc" title="Macro: ' + esc(mac.name) + '">M</span>' : '') + '</button>';
+}
+function keyboardHtml(kb, selected){
+  return '<div class="kbd" id="kbd">' + LAYOUT.map(row => '<div class="row">' + row.map(k => k.gap ? '<div class="gap" style="--w:' + k.gap + '"></div>' : keyHtml(kb, k, selected)).join('') + '</div>').join('') + '</div>';
+}
+function superHtml(kb, name, letter, selected){
+  const code = KEYS[name], map = kb.mappings[code], mac = kb.macros[code];
+  return '<button class="sbtn" data-act="selkey" data-arg="' + code + '" aria-pressed="' + (selected === code) + '" title="' + esc(prettyKey(name)) + '">' + letter + (map ? '<span class="map">' + esc(shortTarget(map.target)) + '</span>' : '') + (mac ? '<span class="mc">M</span>' : '') + '</button>';
+}
+function fitKeyboard(){
+  const stage = $('.stage-kb'), kbd = $('#kbd'); if (!stage || !kbd) return;
+  const avail = stage.clientWidth - 36; // padding of .kbd
+  const u = Math.max(26, Math.min(46, Math.floor((avail + 6) / 18.5 - 6)));
+  kbd.style.setProperty('--u', u + 'px');
+}
+window.addEventListener('resize', fitKeyboard);
+
+function kbInspectorHtml(kb){
+  const code = ui.kbKey;
+  if (code === null) return '<h2>Inspector</h2><div class="empty"><div class="px">Nothing selected</div>Click a key on the keyboard, or a Super Button, to remap it or give it a macro.</div>';
+  const name = KEY_NAME[code] || String(code), map = kb.mappings[code], mac = kb.macros[code];
+  const isExtra = !!META.extra_keys[name];
+  let body = '<div class="selhead"><span class="kname">' + esc(prettyKey(name)) + '</span><span class="knum">key ' + code + ' · 0x' + code.toString(16).padStart(2,'0') + '</span></div>';
+  body += '<p class="current">Now: <b>' + esc(map ? prettyTarget(map.target) : (isExtra ? 'Nothing (not assigned)' : 'Default (' + prettyKey(name) + ')')) + '</b>' + (mac ? '<br>Macro: <b>' + esc(mac.name) + '</b> · ' + mac.steps.length + ' events' : '') + '</p>';
+  const tabs = [['key','Key'],['media','Media'],['mouse','Mouse'],['macro','Macro'],['special','More']];
+  body += '<div class="tabs" role="tablist">' + tabs.map(([id,l]) => '<button role="tab" data-act="kbtab" data-arg="' + id + '" aria-selected="' + (ui.kbTab === id) + '">' + l + '</button>').join('') + '</div>';
+  if (ui.kbTab === 'key'){
+    const got = ui.captured;
+    body += '<div class="capture" tabindex="0" id="capture" data-live="' + (!!got) + '"><span class="lbl">' + (got ? 'Captured' : 'Press the new key here') + '</span><span class="got">' + esc(got ? prettyKey(got) : 'click, then press a key') + '</span></div>';
+    body += '<div class="field"><label>Or pick from the list</label><select class="inp" data-act="pickkey">' + '<option value="">— choose a key —</option>' + META.keys.map(k => '<option value="' + k.name + '"' + (got === k.name ? ' selected' : '') + '>' + esc(prettyKey(k.name)) + '</option>').join('') + '</select></div>';
+    body += '<div class="field"><label>Hold a modifier with it (optional)</label><div class="modrow">' + [['','none'],['left_ctrl','Ctrl'],['left_shift','Shift'],['left_alt','Alt'],['left_gui','Win'],['right_ctrl','R Ctrl'],['right_shift','R Shift'],['right_alt','R Alt']].map(([m,l]) => '<button class="mod" data-act="mod" data-arg="' + m + '" aria-pressed="' + (ui.mod === m) + '">' + l + '</button>').join('') + '</div></div>';
+    const target = got ? (ui.mod ? ui.mod + '+' + got : got) : '';
+    body += '<div class="row-actions"><button class="btn red" data-act="kbmap" data-arg="' + esc(target) + '"' + (target ? '' : ' disabled') + '>Remap to ' + esc(target ? prettyTarget(target) : '…') + '</button></div>';
+    body += '<p class="hint">Only one modifier can be held per remap, which is what the keyboard stores. To make a key type a shifted symbol, choose Shift + the base key.</p>';
+  } else if (ui.kbTab === 'media'){
+    body += '<div class="tiles">' + META.consumer.map(c => '<button class="tile" data-act="kbmap" data-arg="media:' + c.name + '" aria-pressed="' + (map && map.target === 'media:' + c.name) + '">' + esc(MEDIA_PRETTY[c.name] || c.label) + '</button>').join('') + '</div>';
+  } else if (ui.kbTab === 'mouse'){
+    body += '<div class="tiles">' + META.mouse_actions.map(a => '<button class="tile" data-act="kbmap" data-arg="mouse:' + a + '" aria-pressed="' + (map && map.target === 'mouse:' + a) + '">' + esc(MOUSE_PRETTY[a] || a) + '</button>').join('') + '</div>';
+    body += '<p class="hint">Mouse actions come out of the keyboard\'s own mouse interface; the pointer moves with the mouse as usual.</p>';
+  } else if (ui.kbTab === 'macro'){
+    body += macroEditorHtml('keyboard', code, mac);
+  } else {
+    body += '<div class="tiles">' +
+      '<button class="tile" data-act="kbmap" data-arg="fn" aria-pressed="' + (map && map.target === 'fn') + '">Fn layer<small>Acts as a second Fn key</small></button>' +
+      '<button class="tile" data-act="kbmap" data-arg="none" aria-pressed="' + (map && map.target === 'none') + '">Disable key<small>Presses do nothing</small></button>' +
+      '<button class="tile" data-act="kbunmap">Restore default<small>Back to ' + esc(isExtra ? 'unassigned' : prettyKey(name)) + '</small></button>' +
+      '</div>';
+  }
+  return '<h2>Inspector</h2>' + body;
+}
+function kbSettingsHtml(kb){
+  return '<div class="settings">' +
+    '<div class="setting"><span class="name">Volume level</span><span class="desc">The keyboard\'s built-in volume setting, 1 (quiet) to 5 (loud). Shown as "Voice" in the official app.</span><div class="seg">' + [1,2,3,4,5].map(n => '<button data-act="volume" data-arg="' + n + '" aria-pressed="' + (kb.volume === n) + '">' + n + '</button>').join('') + '</div></div>' +
+    '<div class="setting"><span class="name">Profile name</span><span class="desc">Stored on the keyboard, up to 30 characters.</span><div class="inline"><input class="inp" id="kb-name" maxlength="30" value="' + esc(kb.profile_name) + '" placeholder="e.g. Work"><button class="btn" data-act="kbname">Save</button></div></div>' +
+    '<div class="setting"><span class="name">Backup &amp; restore</span><span class="desc">Download every remap and macro as a JSON file, or write a saved file back.</span><div class="inline"><button class="btn" data-act="backup" data-arg="keyboard">Download backup</button><label class="btn">Restore file<input type="file" accept="application/json" hidden data-act="restore" data-arg="keyboard"></label></div></div>' +
+    '<div class="setting"><span class="name">Factory reset</span><span class="desc">Clears all remaps, macros and the profile name. The volume level stays.</span><div class="inline"><button class="btn red" data-act="reset" data-arg="keyboard">Reset keyboard</button></div></div>' +
+  '</div>';
+}
+
+/* ------------------------------------------------------- macro editor ---- */
+function macroFromServer(m){
+  if (!m) return {name:'', repeat:'1', interval_ms:0, steps:[]};
+  return {name:m.name, repeat:(m.cycles === 255 || m.cycles === 65535) ? 'hold' : String(m.cycles), interval_ms:m.interval_ms, steps:m.steps.map(s => { const i = s.indexOf(':'); return {op:s.slice(0,i), arg:s.slice(i+1)}; })};
+}
+function ensureMacro(device, id, existing){
+  if (!ui.macro || ui.macro.device !== device || ui.macro.id !== id){ ui.macro = Object.assign({device, id}, macroFromServer(existing)); }
+  return ui.macro;
+}
+function macroEditorHtml(device, id, existing){
+  const m = ensureMacro(device, id, existing);
+  const isMouse = device === 'mouse';
+  const ops = isMouse ? [['press','Press'],['release','Release'],['tap','Tap'],['click','Click'],['delay','Delay']] : [['press','Press'],['release','Release'],['tap','Tap'],['delay','Delay']];
+  const argField = (st, i) => {
+    if (st.op === 'delay') return '<input class="inp sm" type="number" min="1" max="65535" value="' + esc(st.arg) + '" data-act="stepval" data-arg="' + i + '"> ';
+    if (st.op === 'click') return '<select class="inp sm" data-act="stepval" data-arg="' + i + '">' + ['left','right','middle','back','forward'].map(b => '<option' + (st.arg === b ? ' selected' : '') + '>' + b + '</option>').join('') + '</select>';
+    return '<input class="inp sm" value="' + esc(st.arg) + '" data-act="stepval" data-arg="' + i + '" placeholder="key, e.g. ctrl+c" list="keylist">';
+  };
+  let h = '<div class="field"><label>Macro name</label><input class="inp" id="macro-name" maxlength="' + (isMouse ? 15 : 30) + '" value="' + esc(m.name) + '" placeholder="e.g. Copy and paste"></div>';
+  h += '<div class="field"><label>Events (' + m.steps.length + ' of ' + (isMouse ? META.mouse_macro_max : META.kb_macro_max) + ')</label><div class="steps">' +
+       (m.steps.length ? m.steps.map((st, i) => '<div class="step"><span class="n">' + (i+1) + '</span><select class="inp sm" data-act="stepop" data-arg="' + i + '">' + ops.map(([o,l]) => '<option value="' + o + '"' + (st.op === o ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>' + argField(st, i) + '<button class="x" data-act="stepdel" data-arg="' + i + '" title="Remove">✕</button></div>').join('') : '<div class="none">No events yet. Record them from your keyboard or add them one by one.</div>') +
+       '</div></div>';
+  h += '<datalist id="keylist">' + META.keys.map(k => '<option value="' + k.name + '">').join('') + '</datalist>';
+  h += '<div class="row-actions"><button class="btn rec" data-act="record" data-on="' + ui.recording + '">' + (ui.recording ? '■ Stop recording' : '● Record keys') + '</button><button class="btn sm" data-act="stepadd" data-arg="tap">+ Tap</button><button class="btn sm" data-act="stepadd" data-arg="delay">+ Delay</button>' + (isMouse ? '<button class="btn sm" data-act="stepadd" data-arg="click">+ Click</button>' : '') + '</div>';
+  h += '<div class="field"><label>Repeat</label><div class="inline"><div class="seg">' + [['1','Once'],['2','2×'],['3','3×'],['5','5×'],['10','10×'],['hold', isMouse ? 'Loop' : 'While held']].map(([v,l]) => '<button data-act="repeat" data-arg="' + v + '" aria-pressed="' + (m.repeat === v) + '">' + l + '</button>').join('') + '</div></div></div>';
+  if (isMouse) h += '<p class="muted" style="margin:4px 0 8px">Loop runs until another mouse button is pressed; the mouse has no "while held" macro mode. For a burst of clicks per press use a count with a short pause instead.</p>';
+  h += '<div class="field"><label>Pause between repeats (ms)</label><input class="inp sm" type="number" min="0" max="65535" id="macro-interval" value="' + m.interval_ms + '" style="width:120px"></div>';
+  h += '<div class="row-actions"><button class="btn red" data-act="macrosave">Save macro</button>' + (existing ? '<button class="btn" data-act="macroclear">Remove macro</button>' : '') + '</div>';
+  h += '<p class="hint">' + (isMouse ? 'A delay is the pause after the previous event (the mouse defaults to 10 ms).' : 'Tap = press and release. Combos like <span class="mono">ctrl+c</span> press the modifier first and release it last.') + '</p>';
+  return h;
+}
+function macroSteps(){ return ui.macro.steps.map(s => s.op + ':' + String(s.arg).trim().toLowerCase()); }
+function recordEvent(e){
+  if (!ui.recording || !ui.macro) return;
+  const name = codeToName(e.code); if (!name) return;
+  e.preventDefault();
+  if (e.type === 'keydown' && e.repeat) return;
+  const now = performance.now();
+  if (ui.lastEvt){ const d = Math.round(now - ui.lastEvt); if (d >= 5) ui.macro.steps.push({op:'delay', arg:String(Math.min(65535, d))}); }
+  ui.lastEvt = now;
+  ui.macro.steps.push({op: e.type === 'keydown' ? 'press' : 'release', arg:name});
+  renderInspector();
+}
+function renderInspector(){
+  if (ui.device === 'keyboard'){ const el = $('#kb-insp'); if (el && state.keyboard) el.innerHTML = kbInspectorHtml(state.keyboard); }
+  else { const el = $('#ms-insp'); if (el && state.mouse) el.innerHTML = mouseInspectorHtml(state.mouse); }
+}
+
+/* --------------------------------------------------------------- mouse ---- */
+function renderMouseView(){
+  const v = $('#view-mouse'), ms = state.mouse;
+  if (!ms){
+    v.innerHTML = '<div class="panel full"><h2>Mouse</h2><div class="empty"><div class="px">Retro R8 not found</div>' + esc(state.errors.mouse || '') + '<div class="hint">Connect the mouse with its USB cable and press Refresh. The 2.4 GHz receiver is not supported yet.</div></div></div>';
+    return;
+  }
+  const byIdx = {}; ms.buttons.forEach(b => byIdx[b.index] = b);
+  const activeDpi = ms.dpi_x.values[ms.dpi_index];
+  v.innerHTML =
+    '<div class="panel"><h2>Mouse · click a button</h2>' +
+      '<div class="status"><span>Edition <b>' + esc(ms.edition) + '</b></span><span>Firmware <b>' + esc(ms.version) + '</b></span><span>Profile <b>' + esc(ms.profile_name || 'unnamed') + '</b></span><span>Active <b>' + activeDpi + ' dpi</b> · <b>' + ms.rate.values[ms.rate.current] + ' Hz</b></span></div>' +
+      '<div class="stage-mouse">' + mouseSvg(ms) + '<div class="callouts">' +
+        calloutHtml(byIdx[1], 'R') + calloutHtml(byIdx[2], 'W') + calloutHtml(byIdx[3], 'S1') + calloutHtml(byIdx[4], 'S2') + calloutHtml(byIdx[5], 'S3') + calloutHtml(byIdx[6], 'S4') + calloutHtml(byIdx[8], 'W↑') + calloutHtml(byIdx[7], 'W↓') +
+        '<div class="callout static"><span class="idx">L</span><span><b>Left button</b><br><span class="fn">Always left click · swap sides with left-hand mode</span></span><span></span></div>' +
+      '</div></div>' +
+    '</div>' +
+    '<aside class="panel inspector" id="ms-insp">' + mouseInspectorHtml(ms) + '</aside>' +
+    '<div class="panel full"><h2>DPI</h2>' + dpiHtml(ms) + '</div>' +
+    '<div class="panel full"><h2>Performance &amp; feel</h2>' + perfHtml(ms) + '</div>' +
+    '<div class="panel full"><h2>Mouse settings</h2>' + mouseSettingsHtml(ms) + '</div>';
+}
+function calloutHtml(b, tag){
+  if (!b) return '';
+  const mac = state.mouse.macros.find(m => m.button === b.index);
+  return '<button class="callout" data-act="selbtn" data-arg="' + b.index + '" aria-pressed="' + (ui.mouseBtn === b.index) + '"><span class="idx">' + tag + '</span><span><b>' + esc(R8_BTN_PRETTY[b.name] || b.name) + '</b><br><span class="fn">' + (b.macro_enabled && mac ? 'Macro <b>' + esc(mac.name) + '</b> · ' + mac.steps.length + ' events' : '→ <b>' + esc(fnLabel(b.function)) + '</b>') + '</span></span>' + (b.macro_enabled ? '<span class="chip">Macro</span>' : '<span></span>') + '</button>';
+}
+function mouseSvg(ms){
+  const sel = i => ui.mouseBtn === i;
+  const has = i => ms.buttons.some(b => b.index === i);
+  const swap = ms.left_hand === 1;
+  const part = (idx, d, extra) => '<g class="part" data-act="selbtn" data-arg="' + idx + '" aria-pressed="' + sel(idx) + '" tabindex="0" role="button"><path class="fill" d="' + d + '" ' + (extra||'') + '/></g>';
+  const leftBtn  = 'M 62 44 C 84 20 122 12 128 12 L 128 150 L 46 150 C 40 106 46 70 62 44 Z';
+  const rightBtn = 'M 198 44 C 176 20 138 12 132 12 L 132 150 L 214 150 C 220 106 214 70 198 44 Z';
+  return '<svg class="mouse-svg" viewBox="0 0 260 400" role="img" aria-label="Retro R8 mouse, top view">' +
+    '<path d="M 70 26 C 100 4 160 4 190 26 C 226 64 232 200 222 300 C 214 372 172 392 130 392 C 88 392 46 372 38 300 C 28 200 34 64 70 26 Z" fill="var(--key-light)" stroke="var(--key-ink)" stroke-width="3"/>' +
+    '<g class="static"><path class="fill" d="' + (swap ? rightBtn : leftBtn) + '" fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"/></g>' +
+    part(1, swap ? leftBtn : rightBtn, 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') +
+    part(2, 'M 121 48 h 18 a 8 8 0 0 1 8 8 v 40 a 8 8 0 0 1 -8 8 h -18 a 8 8 0 0 1 -8 -8 v -40 a 8 8 0 0 1 8 -8 z', 'fill="var(--red)" stroke="var(--key-ink)" stroke-width="3"') +
+    '<rect x="121" y="112" width="18" height="24" rx="4" fill="var(--key-dark-edge)" stroke="var(--key-ink)" stroke-width="2"/>' +
+    part(3, 'M 34 172 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') +
+    part(4, 'M 34 218 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') +
+    (has(5) ? part(5, 'M 210 172 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') : '') +
+    (has(6) ? part(6, 'M 210 218 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') : '') +
+    '<rect x="118" y="330" width="24" height="24" fill="var(--red)" stroke="var(--key-ink)" stroke-width="2"/>' +
+    '<text x="130" y="220" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="var(--key-ink)" opacity=".55">RETRO R8</text>' +
+    '<text x="42" y="167" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S1</text>' +
+    '<text x="42" y="267" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S2</text>' +
+    (has(5) ? '<text x="218" y="167" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S3</text>' : '') +
+    (has(6) ? '<text x="218" y="267" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S4</text>' : '') +
+  '</svg>';
+}
+function mouseInspectorHtml(ms){
+  const idx = ui.mouseBtn;
+  if (idx === null) return '<h2>Inspector</h2><div class="empty"><div class="px">Nothing selected</div>Click a button on the mouse diagram to change what it does.</div>';
+  const b = ms.buttons.find(x => x.index === idx); if (!b) return '';
+  const mac = ms.macros.find(m => m.button === idx);
+  const sideBtn = MACRO_BTNS.includes(idx);
+  let body = '<div class="selhead"><span class="kname">' + esc(R8_BTN_PRETTY[b.name] || b.name) + '</span><span class="knum">button ' + idx + '</span></div>';
+  body += '<p class="current">Now: <b>' + esc(b.macro_enabled && mac ? 'Macro "' + mac.name + '"' : fnLabel(b.function)) + '</b>' + (mac && !b.macro_enabled ? '<br><span class="muted">A macro "' + esc(mac.name) + '" is stored but switched off.</span>' : '') + '</p>';
+  const tabs = sideBtn ? [['function','Function'],['macro','Macro']] : [['function','Function']];
+  body += '<div class="tabs" role="tablist">' + tabs.map(([id,l]) => '<button role="tab" data-act="mstab" data-arg="' + id + '" aria-selected="' + (ui.mouseTab === id) + '">' + l + '</button>').join('') + '</div>';
+  if (ui.mouseTab === 'function' || !sideBtn){
+    body += '<input class="inp" id="fn-search" placeholder="Search functions… (e.g. copy, dpi, F5)" value="' + esc(ui.fnSearch) + '">';
+    const q = ui.fnSearch.trim().toLowerCase();
+    const groups = {};
+    META.r8_functions.forEach(f => { if (f.value === 0 && !q) return; if (q && !(f.label.toLowerCase().includes(q) || f.name.includes(q) || f.group.toLowerCase().includes(q))) return; (groups[f.group] = groups[f.group] || []).push(f); });
+    const order = ['Mouse buttons','Scroll & double click','DPI & device','Media & browser','Letters, digits & F-keys','Keys & modifiers','Keypad','Editing shortcuts','Windows shortcuts','Mac shortcuts','Mac','Symbols','Gaming','Device','F13 - F24','Other','None'];
+    body += '<div class="fnlist" style="margin-top:10px">' + order.filter(g => groups[g]).map(g => '<div class="grp">' + esc(g) + '</div>' + groups[g].map(f => '<button data-act="setfn" data-arg="' + f.value + '" aria-pressed="' + (b.function === f.value && !b.macro_enabled) + '"><span>' + esc(f.label) + '</span><span class="v">' + f.value + '</span></button>').join('')).join('') + (Object.keys(groups).length ? '' : '<div class="none" style="padding:10px">Nothing matches.</div>') + '</div>';
+    body += '<div class="row-actions"><button class="btn" data-act="setfn" data-arg="' + ({1:2,2:3,3:5,4:4,5:255,6:255,7:32,8:33}[idx] || 0) + '">Restore default</button></div>';
+  } else {
+    body += macroEditorHtml('mouse', idx, mac);
+    if (mac && !b.macro_enabled) body += '<div class="row-actions"><button class="btn" data-act="macroon">Switch stored macro on</button></div>';
+  }
+  return '<h2>Inspector</h2>' + body;
+}
+function dpiHtml(ms){
+  const [lo, hi] = META.dpi_range;
+  const t = ms.dpi_x;
+  let h = '<p class="lead" style="margin:0 0 12px">Six DPI slots; the DPI button on the mouse cycles through the <b>enabled</b> ones. Tick the active slot to jump to it.</p>';
+  h += '<div class="dpi"><span class="hd">Active</span><span class="hd">On</span><span class="hd">Sensitivity</span><span class="hd">DPI</span>';
+  for (let i = 0; i < 6; i++){
+    const on = !!(t.enabled_mask & (1 << i));
+    h += '<input type="radio" name="dpiactive" data-act="dpiactive" data-arg="' + i + '"' + (ms.dpi_index === i ? ' checked' : '') + (on ? '' : ' disabled') + ' title="Make slot ' + (i+1) + ' active">' +
+         '<input type="checkbox" data-act="dpion" data-arg="' + i + '"' + (on ? ' checked' : '') + ' title="Enable slot ' + (i+1) + '">' +
+         '<div class="inline"><span class="slot">' + (i+1) + '</span><input type="range" min="' + lo + '" max="' + hi + '" step="50" value="' + t.values[i] + '" data-act="dpirange" data-arg="' + i + '"></div>' +
+         '<input class="inp sm mono" type="number" min="' + lo + '" max="' + hi + '" step="50" value="' + t.values[i] + '" data-act="dpinum" data-arg="' + i + '">';
+  }
+  h += '</div>';
+  h += '<div class="row-actions"><button class="btn red" data-act="dpisave">Save DPI slots</button><span class="hint" style="margin:0">Range ' + lo + '–' + hi + ' in steps of 50. Changes are written when you save.</span></div>';
+  if (ms.dpi_x.values.join() !== ms.dpi_y.values.join() || ms.dpi_x.enabled_mask !== ms.dpi_y.enabled_mask) h += '<p class="hint">The Y axis currently has its own table (' + ms.dpi_y.values.join(', ') + '). Saving writes the same values to both axes.</p>';
+  return h;
+}
+function perfHtml(ms){
+  return '<div class="settings">' +
+    '<div class="setting"><span class="name">Polling rate</span><span class="desc">How often the mouse reports, in Hz. Higher is smoother and uses a little more CPU.</span><div class="seg">' + RATES.slice(0, ms.rate.count).map(hz => '<button data-act="rate" data-arg="' + hz + '" aria-pressed="' + (ms.rate.values[ms.rate.current] === hz) + '">' + (hz >= 1000 ? (hz/1000) + 'k' : hz) + '</button>').join('') + '</div></div>' +
+    '<div class="setting"><span class="name">Lift-off distance</span><span class="desc">How high the mouse can be lifted before tracking stops.</span><div class="seg"><button data-act="lod" data-arg="1" aria-pressed="' + (ms.lod === 1) + '">1 mm</button><button data-act="lod" data-arg="2" aria-pressed="' + (ms.lod === 2) + '">2 mm</button></div></div>' +
+    '<div class="setting"><span class="name">Wheel speed</span><span class="desc">Lines per notch, 0 (slowest) to ' + META.wheel_speed_max + '.</span><div class="wheelspeed"><input type="range" min="0" max="' + META.wheel_speed_max + '" value="' + ms.wheel_speed + '" data-act="wheelspeed"><span class="mono" id="wheelval">' + ms.wheel_speed + '</span></div></div>' +
+    '<div class="setting"><span class="name">Wheel direction</span><span class="desc">Reverse to scroll the content the way your finger moves (natural scrolling).</span><button class="switch" role="switch" data-act="wheeldir" aria-checked="' + (ms.wheel_direction === 1) + '"><span class="track"></span><span>' + (ms.wheel_direction === 1 ? 'Reversed' : 'Normal') + '</span></button></div>' +
+    '<div class="setting"><span class="name">Left-hand mode</span><span class="desc">Swaps the left and right buttons.</span><button class="switch" role="switch" data-act="lefthand" aria-checked="' + (ms.left_hand === 1) + '"><span class="track"></span><span>' + (ms.left_hand === 1 ? 'On' : 'Off') + '</span></button></div>' +
+  '</div>';
+}
+function mouseSettingsHtml(ms){
+  return '<div class="settings">' +
+    '<div class="setting"><span class="name">Profile name</span><span class="desc">Stored on the mouse, up to 10 characters.</span><div class="inline"><input class="inp" id="ms-name" maxlength="10" value="' + esc(ms.profile_name) + '" placeholder="e.g. Desk"><button class="btn" data-act="msname">Save</button></div></div>' +
+    '<div class="setting"><span class="name">Backup &amp; restore</span><span class="desc">Download the whole mouse configuration as JSON, or write a saved file back.</span><div class="inline"><button class="btn" data-act="backup" data-arg="mouse">Download backup</button><label class="btn">Restore file<input type="file" accept="application/json" hidden data-act="restore" data-arg="mouse"></label></div></div>' +
+    '<div class="setting"><span class="name">Factory reset</span><span class="desc">Restores the mouse to its factory settings: DPI table, buttons, macros and name.</span><div class="inline"><button class="btn red" data-act="reset" data-arg="mouse">Reset mouse</button></div></div>' +
+  '</div>';
+}
+
+/* -------------------------------------------------------------- events ---- */
+function dpiDraft(){
+  const vals = [...document.querySelectorAll('[data-act="dpinum"]')].map(i => Math.min(META.dpi_range[1], Math.max(META.dpi_range[0], Math.round((+i.value || META.dpi_range[0]) / 50) * 50)));
+  let mask = 0; document.querySelectorAll('[data-act="dpion"]').forEach((c, i) => { if (c.checked) mask |= 1 << i; });
+  return {values:vals, enabled_mask:mask || 1};
+}
+async function backup(device){
+  let cfg;
+  if (demo) cfg = state[device];
+  else { try{ const r = await fetch('/api/' + device + '/dump', {headers:{'X-Requested-With':'retro-config'}}); cfg = await r.json(); }catch(e){ toast('Could not read the ' + device, 'Backup failed', true); return; } }
+  const blob = new Blob([JSON.stringify(cfg, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '8bitdo-' + device + '-' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  toast('Backup downloaded');
+}
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-act]'); if (!el || el.tagName === 'INPUT' && el.type !== 'radio' && el.type !== 'checkbox') return;
+  const act = el.dataset.act, arg = el.dataset.arg;
+  if (act === 'dev'){ ui.device = arg; ui.recording = false; render(); }
+  else if (act === 'refresh'){ toast('Reading devices…'); await loadState(); }
+  else if (act === 'theme'){ const cur = document.documentElement.getAttribute('data-theme'); const next = cur === 'dark' ? 'light' : cur === 'light' ? 'dark' : (matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'); document.documentElement.setAttribute('data-theme', next); try{ localStorage.setItem('rc-theme', next); }catch(_){} }
+  else if (act === 'selkey'){ ui.kbKey = +arg; ui.captured = null; ui.mod = ''; ui.macro = null; ui.recording = false; render(); }
+  else if (act === 'kbtab'){ ui.kbTab = arg; ui.recording = false; renderInspector(); if (arg === 'key') { const c = $('#capture'); if (c) c.focus(); } }
+  else if (act === 'mod'){ ui.mod = arg; renderInspector(); }
+  else if (act === 'kbmap'){ if (!arg) return; const ok = await act_('keyboard', 'map', {key:ui.kbKey, target:arg}, prettyKey(KEY_NAME[ui.kbKey]) + ' → ' + prettyTarget(arg)); if (ok){ ui.captured = null; ui.mod = ''; renderInspector(); } }
+  else if (act === 'kbunmap'){ await act_('keyboard', 'unmap', {key:ui.kbKey}, prettyKey(KEY_NAME[ui.kbKey]) + ' restored'); }
+  else if (act === 'volume'){ await act_('keyboard', 'volume', {level:+arg}, 'Volume level ' + arg); }
+  else if (act === 'kbname'){ await act_('keyboard', 'name', {name:$('#kb-name').value}, 'Profile name saved'); }
+  else if (act === 'msname'){ await act_('mouse', 'name', {name:$('#ms-name').value}, 'Profile name saved'); }
+  else if (act === 'backup'){ await backup(arg); }
+  else if (act === 'reset'){ if (confirm(arg === 'keyboard' ? 'Reset the keyboard? All remaps, macros and the profile name will be erased.' : 'Reset the mouse to factory settings? DPI, buttons, macros and the name will be erased.')) await act_(arg, 'reset', {}, (arg === 'keyboard' ? 'Keyboard' : 'Mouse') + ' reset'); }
+  else if (act === 'record'){ ui.recording = !ui.recording; ui.lastEvt = 0; renderInspector(); if (ui.recording) toast('Recording: type on your keyboard, then press Stop', 'Macro'); }
+  else if (act === 'stepadd'){ ui.macro.steps.push(arg === 'delay' ? {op:'delay', arg:'50'} : arg === 'click' ? {op:'click', arg:'left'} : {op:'tap', arg:''}); renderInspector(); }
+  else if (act === 'stepdel'){ ui.macro.steps.splice(+arg, 1); renderInspector(); }
+  else if (act === 'repeat'){ ui.macro.repeat = arg; renderInspector(); }
+  else if (act === 'macrosave'){
+    ui.macro.name = $('#macro-name').value; ui.macro.interval_ms = +$('#macro-interval').value || 0; ui.recording = false;
+    const steps = macroSteps().filter(s => !s.endsWith(':'));
+    if (!steps.length){ toast('Add at least one event first', 'Macro', true); return; }
+    const dev = ui.macro.device, id = ui.macro.id;
+    const ok = await act_(dev, 'macro', {[dev === 'keyboard' ? 'key' : 'button']:id, name:ui.macro.name || 'macro', repeat:ui.macro.repeat, interval_ms:ui.macro.interval_ms, steps}, 'Macro saved');
+    if (ok) ui.macro = null;
+  }
+  else if (act === 'macroclear'){ const dev = ui.macro.device, id = ui.macro.id; const ok = await act_(dev, dev === 'keyboard' ? 'macro_clear' : 'macro_off', {[dev === 'keyboard' ? 'key' : 'button']:id}, dev === 'keyboard' ? 'Macro removed' : 'Macro switched off'); if (ok) ui.macro = null; }
+  else if (act === 'macroon'){ const b = state.mouse.buttons.find(x => x.index === ui.mouseBtn); const m = state.mouse.macros.find(x => x.button === ui.mouseBtn); if (b && m) await act_('mouse', 'macro', {button:b.index, name:m.name, repeat:(m.cycles === 65535 ? 'hold' : String(m.cycles)), interval_ms:m.interval_ms, steps:m.steps}, 'Macro switched on'); }
+  else if (act === 'selbtn'){ ui.mouseBtn = +arg; ui.macro = null; ui.recording = false; ui.fnSearch = ''; if (!MACRO_BTNS.includes(ui.mouseBtn)) ui.mouseTab = 'function'; render(); }
+  else if (act === 'mstab'){ ui.mouseTab = arg; ui.recording = false; renderInspector(); }
+  else if (act === 'setfn'){ await act_('mouse', 'button', {button:ui.mouseBtn, function:+arg}, (R8_BTN_PRETTY[state.mouse.buttons.find(x => x.index === ui.mouseBtn).name]) + ' → ' + fnLabel(+arg)); }
+  else if (act === 'dpiactive'){ await act_('mouse', 'dpi_slot', {slot:+arg}, 'Active DPI: slot ' + (+arg + 1)); }
+  else if (act === 'dpion'){ /* draft only; saved with the table */ }
+  else if (act === 'dpisave'){ const d = dpiDraft(); await act_('mouse', 'dpi', {axis:'both', values:d.values, enabled_mask:d.enabled_mask}, 'DPI slots saved'); }
+  else if (act === 'rate'){ await act_('mouse', 'rate', {hz:+arg}, arg + ' Hz'); }
+  else if (act === 'lod'){ await act_('mouse', 'lod', {mm:+arg}, 'Lift-off ' + arg + ' mm'); }
+  else if (act === 'wheeldir'){ await act_('mouse', 'wheel_direction', {reversed: el.getAttribute('aria-checked') !== 'true'}, 'Wheel direction saved'); }
+  else if (act === 'lefthand'){ await act_('mouse', 'left_hand', {on: el.getAttribute('aria-checked') !== 'true'}, 'Left-hand mode saved'); }
+});
+async function act_(device, action, body, msg){ const el = document.activeElement; if (el && el.classList) el.classList.add('pressed'); const ok = await act(device, action, body, msg); return ok; }
+document.addEventListener('change', async e => {
+  const el = e.target; const act = el.dataset.act; if (!act) return;
+  if (act === 'pickkey'){ ui.captured = el.value || null; renderInspector(); }
+  else if (act === 'stepop'){ const st = ui.macro.steps[+el.dataset.arg]; st.op = el.value; if (st.op === 'delay' && !/^\d+$/.test(st.arg)) st.arg = '50'; if (st.op === 'click' && !['left','right','middle','back','forward'].includes(st.arg)) st.arg = 'left'; renderInspector(); }
+  else if (act === 'stepval'){ ui.macro.steps[+el.dataset.arg].arg = el.value; }
+  else if (act === 'dpirange'){ const n = document.querySelector('[data-act="dpinum"][data-arg="' + el.dataset.arg + '"]'); if (n) n.value = el.value; }
+  else if (act === 'dpinum'){ const r = document.querySelector('[data-act="dpirange"][data-arg="' + el.dataset.arg + '"]'); if (r) r.value = el.value; }
+  else if (act === 'wheelspeed'){ await act('mouse', 'wheel_speed', {value:+el.value}, 'Wheel speed ' + el.value); }
+  else if (act === 'restore'){
+    const f = el.files[0]; if (!f) return;
+    try{ const cfg = JSON.parse(await f.text()); if (confirm('Write "' + f.name + '" to the ' + el.dataset.arg + '? Current settings will be overwritten.')) await act(el.dataset.arg, 'apply', {config:cfg}, 'Backup restored'); }
+    catch(err){ toast('That file is not a valid backup', 'Restore failed', true); }
+    el.value = '';
+  }
+});
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.act === 'dpirange'){ const n = document.querySelector('[data-act="dpinum"][data-arg="' + el.dataset.arg + '"]'); if (n) n.value = el.value; }
+  else if (el.dataset.act === 'wheelspeed'){ const v = $('#wheelval'); if (v) v.textContent = el.value; }
+  else if (el.id === 'fn-search'){ ui.fnSearch = el.value; const list = $('.fnlist'); if (list){ const tmp = document.createElement('div'); tmp.innerHTML = mouseInspectorHtml(state.mouse); const nl = tmp.querySelector('.fnlist'); if (nl) list.replaceWith(nl); } }
+  else if (el.id === 'macro-name' && ui.macro) ui.macro.name = el.value;
+  else if (el.id === 'macro-interval' && ui.macro) ui.macro.interval_ms = +el.value || 0;
+});
+document.addEventListener('keydown', e => {
+  if (ui.recording){ recordEvent(e); return; }
+  const cap = $('#capture');
+  if (cap && document.activeElement === cap){ const n = codeToName(e.code); if (n){ e.preventDefault(); ui.captured = n; renderInspector(); $('#capture').focus(); } }
+});
+document.addEventListener('keyup', e => { if (ui.recording) recordEvent(e); });
+document.addEventListener('focusin', e => { if (e.target.id === 'capture' && !ui.captured) e.target.querySelector('.got').textContent = 'waiting for a key…'; });
+
+try{ const t = localStorage.getItem('rc-theme'); if (t) document.documentElement.setAttribute('data-theme', t); }catch(_){}
+{ const h = new URLSearchParams(location.hash.replace(/^#/, '').replace(/^mouse$/, 'device=mouse'));
+  if (h.get('device') === 'mouse') ui.device = 'mouse';
+  if (h.get('key')){ ui.device = 'keyboard'; ui.kbKey = +h.get('key'); }
+  if (h.get('button')){ ui.device = 'mouse'; ui.mouseBtn = +h.get('button'); ui.mouseTab = h.get('tab') || 'function'; }
+  if (h.get('tab') && ui.device === 'keyboard') ui.kbTab = h.get('tab'); }
+loadState();
+})();
+</script>
