@@ -1,4 +1,4 @@
-# 8BitDo Retro 87 / Retro R8 configuration protocol
+# Protocol
 
 Derived from 8BitDo Ultimate Software V2 for Windows (v1.35): the managed
 UI (`8BitDo Ultimate Software V2.dll`, decompiled with ilspycmd) and the native
@@ -8,7 +8,9 @@ packets. Everything below was verified against real hardware.
 Vendor ID is `0x2DC8` for both devices. The official app refers to the
 keyboard as "JP" and to the mouse as "Mouse"/"Retro R8".
 
-## Retro 87 keyboard (PID 0x5200 wired, 0x5201 via 2.4 GHz receiver)
+## Retro 87 Keyboard
+
+PID `0x5200` wired, `0x5201` via the 2.4 GHz receiver.
 
 Three USB HID interfaces:
 
@@ -84,7 +86,9 @@ A single ack follows the last packet.
 The firmware version is not readable through this interface (the official
 app runs `dfu4.exe -r -dv 2dc8 -dp 5200`); USB `bcdDevice` is shown instead.
 
-## Retro R8 mouse (PID 0x5205 wired, 0x5206 via receiver)
+## Retro R8 Mouse
+
+PID `0x5205` wired, `0x5206` via the 2.4 GHz adapter.
 
 Four USB HID interfaces:
 
@@ -110,7 +114,9 @@ Request (64 bytes): `[0x01, class, cmd, op, payload...]`, op `1` = read,
 `status & op != 0` on success (`0x11` / `0x14`). Class `6` is configuration,
 class `4` device info.
 
-### Commands (class 6 unless noted)
+### Commands
+
+Class 6 unless noted.
 
 | cmd | read payload -> reply payload | write payload |
 |-----|------------------------------|---------------|

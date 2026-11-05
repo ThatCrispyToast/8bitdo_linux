@@ -1,4 +1,4 @@
-# How the protocol was derived (and how to do it again)
+# Reverse Engineering
 
 Everything in `docs/PROTOCOL.md` came from 8BitDo Ultimate Software V2 for Windows,
 v1.35 (`resources/8BitDo_Ultimate_Software_V2_Windows_V1.35.zip`), and was then
@@ -7,7 +7,7 @@ not in the repository and must not be committed; this page regenerates them in
 about 15 minutes.
 Scripts live in `tools/reverse/`.
 
-## 1. Unpack the app
+## 1. Unpack
 
 ```
 unzip resources/8BitDo_Ultimate_Software_V2_Windows_V1.35.zip -d $SCRATCH/sw
@@ -26,7 +26,7 @@ That yields `8BitDo Ultimate Software V2.dll` (the WPF app, 100 MB, mostly image
 C# only shapes buffers and P/Invokes it. `RTKHIDKit.dll` is Realtek's HID DFU kit (used
 for mouse firmware updates), `dfu4.exe` reads the keyboard firmware version.
 
-## 2. Decompile the C# (ilspycmd)
+## 2. Decompile C#
 
 ```
 nix-shell -p ilspycmd --run "ilspycmd -p -o $SCRATCH/src/App '$SCRATCH/bundle/8BitDo Ultimate Software V2.dll'"
@@ -49,7 +49,7 @@ Where to look (namespace `AdvanceSuper`):
   (macro record bytes).
 - `Data/LanguageTools.cs` - product names per colour/edition.
 
-## 3. Decompile the native DLL (Ghidra headless)
+## 3. Decompile Native DLL
 
 ```
 python3 tools/reverse/pe_exports.py 8BitDoAdvance.dll > $SCRATCH/exports.txt
@@ -80,7 +80,7 @@ validate), then `ReadProfile` / `WriteProfile`, `ReadMapKey` / `WriteMapKey`, `R
 `Write*` for lod, wheel, DPI, rate, macros, `ClearProfile`; `Open_MouseHid` shows how the
 receiver's `0xFF0B`/`0x0104` collection is selected.
 
-## 4. Verify on hardware
+## 4. Verify on Hardware
 
 Every command was exercised with a reversible round-trip (write, read back, restore)
 using scratch targets that do not disturb normal use: the keyboard's `scroll_lock` key and
@@ -89,7 +89,7 @@ only commits a profile name when both 10-byte chunks are written; the keyboard s
 macro's repeat interval as a trailing delay record that `count` includes; and the mouse
 button table is bigger than the app knows (below).
 
-### Which table entry drives which input
+### Button Table Entries
 
 A read-back proves that a write landed, not what the entry controls. The app's own
 `ReadMapKey` loop (positions 1..6, index byte ignored) turned out to hide two things:
@@ -110,7 +110,7 @@ That is how the entries were assigned and how the two wheel functions were found
 named backwards in the app (`WHEEL_UP` = 32 sends wheel -1). The full evidence table is
 in `docs/PROTOCOL.md`.
 
-## Ideas not done
+## Future Work
 
 - 2.4 GHz receiver support for both devices (PIDs 0x5201 / 0x5206).
 - Other 8BitDo devices: `VIDPID.cs` lists ~60 product IDs; the "Advance" read/write
