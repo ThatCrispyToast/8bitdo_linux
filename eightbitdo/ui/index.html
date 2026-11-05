@@ -17,7 +17,7 @@
   :root:not([data-theme="light"]){
     --plastic:#232325; --paper:#303033; --paper-2:#3b3b3f; --ink:#ecebe6; --ink-soft:#b1aea7; --line:#57565c;
     --dark:#151517; --dark-2:#0e0e0f; --on-dark:#ecebe6; --on-dark-soft:#a6a39c;
-    --red:#e93a30; --red-ink:#ff8d85; --on-red:#fff; --good:#5fca7e; --warn:#e6ad45; --case:#4a494d;
+    --red:#e93a30; --red-ink:#b3241c; --on-red:#fff; --good:#5fca7e; --warn:#e6ad45; --case:#4a494d;
     --shadow:3px 3px 0 #0a0a0b; --shadow-sm:2px 2px 0 #0a0a0b; --focus:0 0 0 3px var(--paper),0 0 0 5px var(--red);
     color-scheme:dark;
   }
@@ -25,7 +25,7 @@
 :root[data-theme="dark"]{
   --plastic:#232325; --paper:#303033; --paper-2:#3b3b3f; --ink:#ecebe6; --ink-soft:#b1aea7; --line:#57565c;
   --dark:#151517; --dark-2:#0e0e0f; --on-dark:#ecebe6; --on-dark-soft:#a6a39c;
-  --red:#e93a30; --red-ink:#ff8d85; --on-red:#fff; --good:#5fca7e; --warn:#e6ad45; --case:#4a494d;
+  --red:#e93a30; --red-ink:#b3241c; --on-red:#fff; --good:#5fca7e; --warn:#e6ad45; --case:#4a494d;
   --shadow:3px 3px 0 #0a0a0b; --shadow-sm:2px 2px 0 #0a0a0b; --focus:0 0 0 3px var(--paper),0 0 0 5px var(--red);
   color-scheme:dark;
 }
@@ -87,24 +87,24 @@ main{margin-top:20px}
 .kbd{--u:44px;--g:6px;display:inline-flex;flex-direction:column;gap:var(--g);padding:16px;background:var(--case);border:2px solid var(--key-ink);border-radius:8px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.18),var(--shadow)}
 .row{display:flex;gap:var(--g)}
 .key,.gap{width:calc(var(--w,1) * (var(--u) + var(--g)) - var(--g));height:var(--u);flex:none}
-.key{position:relative;padding:0;border:2px solid var(--key-ink);border-radius:4px;background:var(--key-light);color:var(--key-text);box-shadow:inset 0 -4px 0 var(--key-light-edge);font-family:var(--font-body);font-weight:600;font-size:11px;line-height:1.1;text-align:left;cursor:pointer;transition:transform .06s}
+.key{position:relative;padding:0;overflow:hidden;border:2px solid var(--key-ink);border-radius:4px;background:var(--key-light);color:var(--key-text);box-shadow:inset 0 -4px 0 var(--key-light-edge);font-family:var(--font-body);font-weight:600;font-size:clamp(8px,calc(var(--u) * .27),11px);line-height:1.1;text-align:left;cursor:pointer;transition:transform .06s}
 .key .leg{position:absolute;left:5px;top:4px;right:4px;white-space:pre}
 .key.mod{background:var(--key-dark);color:var(--key-text-dark);box-shadow:inset 0 -4px 0 var(--key-dark-edge)}
 .key.accent{background:var(--red);color:var(--on-red);box-shadow:inset 0 -4px 0 var(--red-ink)}
 .key:hover{transform:translateY(-2px)}
 .key[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:2px;transform:translateY(-2px)}
 .key.mapped .leg{top:3px}
-.key .map{position:absolute;left:2px;right:2px;bottom:3px;font-size:9px;font-weight:600;background:var(--red);color:var(--on-red);padding:1px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-mono)}
+.key .map{position:absolute;left:2px;right:2px;bottom:3px;font-size:clamp(7px,calc(var(--u) * .21),9px);font-weight:600;background:var(--red);color:var(--on-red);padding:1px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-mono)}
 .key .mc{position:absolute;top:2px;right:2px;width:13px;height:13px;background:var(--red);color:var(--on-red);font-family:var(--font-pixel);font-size:7px;line-height:13px;text-align:center;border:1px solid var(--key-ink)}
 .key:disabled{cursor:not-allowed;opacity:.85}
 .key:disabled:hover{transform:none}
 .super{display:flex;align-items:center;gap:22px;margin-top:16px;padding:14px 18px;background:var(--case);border:2px solid var(--key-ink);border-radius:8px;box-shadow:var(--shadow)}
-.super .desc{color:var(--key-ink)}
+.super .desc{color:var(--ink)}
 .super .desc b{display:block;font-family:var(--font-pixel);font-size:8px;text-transform:uppercase;margin-bottom:4px}
 .sbtn{position:relative;width:66px;height:66px;border-radius:50%;border:3px solid var(--key-ink);background:var(--red);color:var(--on-red);font-family:var(--font-pixel);font-size:14px;box-shadow:inset 0 -8px 0 var(--red-ink),0 3px 0 var(--key-ink);flex:none}
 .sbtn:hover{transform:translateY(-2px)} .sbtn[aria-pressed="true"]{outline:3px solid var(--red);outline-offset:3px}
-.sbtn .map{position:absolute;left:50%;transform:translateX(-50%);bottom:-26px;font-size:9px;font-family:var(--font-mono);font-weight:600;background:var(--red);color:var(--on-red);padding:1px 4px;white-space:nowrap;border:1px solid var(--key-ink)}
-.sbtn .mc{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:var(--key-ink);color:#fff;font-family:var(--font-pixel);font-size:7px;line-height:16px;text-align:center;border:1px solid var(--key-ink)}
+.sbtn .map{position:absolute;left:50%;transform:translateX(-50%);bottom:-10px;max-width:84px;overflow:hidden;text-overflow:ellipsis;font-size:9px;font-family:var(--font-mono);font-weight:600;background:var(--red);color:var(--on-red);padding:1px 4px;white-space:nowrap;border:1px solid var(--key-ink)}
+.sbtn .mc{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:var(--key-ink);color:var(--key-text-dark);font-family:var(--font-pixel);font-size:7px;line-height:16px;text-align:center;border:1px solid var(--key-ink)}
 
 /* ---- inspector bits ---- */
 .selhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
@@ -131,12 +131,12 @@ main{margin-top:20px}
 .inp.sm{padding:5px 8px;font-size:12px}
 select.inp{font-family:var(--font-body)}
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
-.seg{display:inline-flex;border:2px solid var(--ink);box-shadow:var(--shadow-sm)}
+.seg{display:inline-flex;align-self:flex-start;border:2px solid var(--ink);box-shadow:var(--shadow-sm)}
 .seg button{padding:8px 12px;border:0;border-right:2px solid var(--ink);background:var(--paper);font-family:var(--font-mono);font-size:13px;font-weight:500;min-width:44px}
 .seg button:last-child{border-right:0}
 .seg button[aria-pressed="true"]{background:var(--dark);color:var(--on-dark)}
 .seg button:disabled{opacity:.4;cursor:not-allowed}
-.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.switch{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:0;border:0;background:none;cursor:pointer;user-select:none}
 .switch .track{width:46px;height:24px;border:2px solid var(--ink);background:var(--paper-2);position:relative;box-shadow:var(--shadow-sm)}
 .switch .track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--dark);transition:left .1s}
 .switch[aria-checked="true"] .track{background:var(--red)} .switch[aria-checked="true"] .track::after{left:24px;background:var(--paper)}
@@ -162,6 +162,7 @@ select.inp{font-family:var(--font-body)}
 .setting .name{font-weight:600}
 .setting .desc{font-size:12px;color:var(--ink-soft);line-height:1.4}
 .inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.inline>.inp{flex:1 1 140px;width:auto}
 
 /* ---- mouse ---- */
 .stage-mouse{display:grid;grid-template-columns:300px minmax(0,1fr);gap:22px;align-items:start}
@@ -187,7 +188,8 @@ select.inp{font-family:var(--font-body)}
 .fnlist button .v{font-family:var(--font-mono);font-size:11px;opacity:.6}
 .dpi{display:grid;grid-template-columns:auto auto 1fr 84px;gap:8px 12px;align-items:center}
 .dpi .hd{font-family:var(--font-pixel);font-size:7px;text-transform:uppercase;color:var(--ink-soft)}
-.dpi input[type=range]{width:100%;accent-color:var(--red)}
+.dpi .inline{flex-wrap:nowrap}
+.dpi input[type=range]{flex:1;min-width:0;accent-color:var(--red)}
 .dpi input[type=checkbox],.dpi input[type=radio]{accent-color:var(--red);width:18px;height:18px;margin:0}
 .dpi .slot{font-family:var(--font-mono);font-size:12px}
 .wheelspeed{display:flex;align-items:center;gap:12px}
@@ -201,7 +203,7 @@ select.inp{font-family:var(--font-body)}
 .tst.err{background:var(--red);color:var(--on-red)}
 .tst .px{display:block;margin-bottom:4px;font-size:7px;opacity:.8}
 
-@media (max-width:1000px){.view{grid-template-columns:1fr}.inspector{position:static}.stage-mouse{grid-template-columns:1fr}}
+@media (max-width:1120px){.view{grid-template-columns:minmax(0,1fr)}.inspector{position:static}.stage-mouse{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div id="app">
@@ -408,6 +410,7 @@ function fitKeyboard(){
   const avail = stage.clientWidth - 36; // padding of .kbd
   const u = Math.max(26, Math.min(46, Math.floor((avail + 6) / 18.5 - 6)));
   kbd.style.setProperty('--u', u + 'px');
+  const sup = $('.super'); if (sup) sup.style.maxWidth = kbd.offsetWidth + 'px'; // line up with the case
 }
 window.addEventListener('resize', fitKeyboard);
 
@@ -528,29 +531,31 @@ function calloutHtml(b, tag){
   const mac = state.mouse.macros.find(m => m.button === b.index);
   return '<button class="callout" data-act="selbtn" data-arg="' + b.index + '" aria-pressed="' + (ui.mouseBtn === b.index) + '"><span class="idx">' + tag + '</span><span><b>' + esc(R8_BTN_PRETTY[b.name] || b.name) + '</b><br><span class="fn">' + (b.macro_enabled && mac ? 'Macro <b>' + esc(mac.name) + '</b> · ' + mac.steps.length + ' events' : '→ <b>' + esc(fnLabel(b.function)) + '</b>') + '</span></span>' + (b.macro_enabled ? '<span class="chip">Macro</span>' : '<span></span>') + '</button>';
 }
+/* Shell: elliptical nose (centre 130,150, 92x136), straight flanks x=38/222, rounded tail.
+   Main buttons follow the nose 6 px inside it; side buttons are centred on the flanks. */
 function mouseSvg(ms){
   const sel = i => ui.mouseBtn === i;
   const has = i => ms.buttons.some(b => b.index === i);
   const swap = ms.left_hand === 1;
-  const part = (idx, d, extra) => '<g class="part" data-act="selbtn" data-arg="' + idx + '" aria-pressed="' + sel(idx) + '" tabindex="0" role="button"><path class="fill" d="' + d + '" ' + (extra||'') + '/></g>';
-  const leftBtn  = 'M 62 44 C 84 20 122 12 128 12 L 128 150 L 46 150 C 40 106 46 70 62 44 Z';
-  const rightBtn = 'M 198 44 C 176 20 138 12 132 12 L 132 150 L 214 150 C 220 106 214 70 198 44 Z';
+  const stroke = 'stroke="var(--key-ink)" stroke-width="3" stroke-linejoin="round"';
+  const rr = (x, y, w, h, r) => 'M ' + (x+r) + ' ' + y + ' h ' + (w-2*r) + ' a ' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + r + ' v ' + (h-2*r) + ' a ' + r + ' ' + r + ' 0 0 1 ' + (-r) + ' ' + r +
+                                ' h ' + (2*r-w) + ' a ' + r + ' ' + r + ' 0 0 1 ' + (-r) + ' ' + (-r) + ' v ' + (2*r-h) + ' a ' + r + ' ' + r + ' 0 0 1 ' + r + ' ' + (-r) + ' z';
+  const part = (idx, d, fill) => '<g class="part" data-act="selbtn" data-arg="' + idx + '" aria-pressed="' + sel(idx) + '"><path class="fill" d="' + d + '" fill="' + fill + '" ' + stroke + '/></g>';
+  const label = (x, y, anchor, t) => '<text x="' + x + '" y="' + y + '" text-anchor="' + anchor + '" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">' + t + '</text>';
+  const leftBtn  = 'M 127 20.08 A 86 130 0 0 0 44 150 L 127 150 Z';
+  const rightBtn = 'M 133 20.08 A 86 130 0 0 1 216 150 L 133 150 Z';
+  const side = (idx, x, y) => has(idx) ? part(idx, rr(x, y, 14, 40, 6), 'var(--key-dark)') : '';
   return '<svg class="mouse-svg" viewBox="0 0 260 400" role="img" aria-label="Retro R8 mouse, top view">' +
-    '<path d="M 70 26 C 100 4 160 4 190 26 C 226 64 232 200 222 300 C 214 372 172 392 130 392 C 88 392 46 372 38 300 C 28 200 34 64 70 26 Z" fill="var(--key-light)" stroke="var(--key-ink)" stroke-width="3"/>' +
-    '<g class="static"><path class="fill" d="' + (swap ? rightBtn : leftBtn) + '" fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"/></g>' +
-    part(1, swap ? leftBtn : rightBtn, 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') +
-    part(2, 'M 121 48 h 18 a 8 8 0 0 1 8 8 v 40 a 8 8 0 0 1 -8 8 h -18 a 8 8 0 0 1 -8 -8 v -40 a 8 8 0 0 1 8 -8 z', 'fill="var(--red)" stroke="var(--key-ink)" stroke-width="3"') +
-    '<rect x="121" y="112" width="18" height="24" rx="4" fill="var(--key-dark-edge)" stroke="var(--key-ink)" stroke-width="2"/>' +
-    part(3, 'M 34 172 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') +
-    part(4, 'M 34 218 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') +
-    (has(5) ? part(5, 'M 210 172 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') : '') +
-    (has(6) ? part(6, 'M 210 218 h 16 a 5 5 0 0 1 5 5 v 30 a 5 5 0 0 1 -5 5 h -16 a 5 5 0 0 1 -5 -5 v -30 a 5 5 0 0 1 5 -5 z', 'fill="var(--key-dark)" stroke="var(--key-ink)" stroke-width="3"') : '') +
-    '<rect x="118" y="330" width="24" height="24" fill="var(--red)" stroke="var(--key-ink)" stroke-width="2"/>' +
-    '<text x="130" y="220" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="var(--key-ink)" opacity=".55">RETRO R8</text>' +
-    '<text x="42" y="167" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S1</text>' +
-    '<text x="42" y="267" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S2</text>' +
-    (has(5) ? '<text x="218" y="167" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S3</text>' : '') +
-    (has(6) ? '<text x="218" y="267" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--key-ink)">S4</text>' : '') +
+    '<path d="M 38 150 A 92 136 0 0 1 222 150 L 222 300 A 92 90 0 0 1 38 300 Z" fill="var(--key-light)" ' + stroke + '/>' +
+    '<g class="static"><path class="fill" d="' + (swap ? rightBtn : leftBtn) + '" fill="var(--key-dark)" ' + stroke + '/></g>' +
+    part(1, swap ? leftBtn : rightBtn, 'var(--key-dark)') +
+    part(2, rr(119, 44, 22, 52, 9), 'var(--red)') +
+    '<rect x="124" y="106" width="12" height="18" rx="3" fill="var(--key-dark-edge)" stroke="var(--key-ink)" stroke-width="2"/>' +
+    side(3, 31, 172) + side(4, 31, 220) + side(5, 215, 172) + side(6, 215, 220) +
+    '<rect x="118" y="326" width="24" height="24" fill="var(--red)" stroke="var(--key-ink)" stroke-width="2"/>' +
+    '<text x="130" y="224" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="var(--key-ink)" opacity=".55">RETRO R8</text>' +
+    (has(3) ? label(52, 195.5, 'start', 'S1') : '') + (has(4) ? label(52, 243.5, 'start', 'S2') : '') +
+    (has(5) ? label(208, 195.5, 'end', 'S3') : '') + (has(6) ? label(208, 243.5, 'end', 'S4') : '') +
   '</svg>';
 }
 function mouseInspectorHtml(ms){
@@ -667,7 +672,11 @@ document.addEventListener('click', async e => {
   else if (act === 'wheeldir'){ await act_('mouse', 'wheel_direction', {reversed: el.getAttribute('aria-checked') !== 'true'}, 'Wheel direction saved'); }
   else if (act === 'lefthand'){ await act_('mouse', 'left_hand', {on: el.getAttribute('aria-checked') !== 'true'}, 'Left-hand mode saved'); }
 });
-async function act_(device, action, body, msg){ const el = document.activeElement; if (el && el.classList) el.classList.add('pressed'); const ok = await act(device, action, body, msg); return ok; }
+async function act_(device, action, body, msg){
+  const el = document.activeElement; if (el && el.classList) el.classList.add('pressed');
+  try{ return await act(device, action, body, msg); }
+  finally{ if (el && el.classList) el.classList.remove('pressed'); } // a failed write does not re-render
+}
 document.addEventListener('change', async e => {
   const el = e.target; const act = el.dataset.act; if (!act) return;
   if (act === 'pickkey'){ ui.captured = el.value || null; renderInspector(); }
