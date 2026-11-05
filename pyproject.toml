@@ -31,4 +31,4 @@ Issues = "https://github.com/ThatCrispyToast/8bitdo_linux/issues"
 include = ["eightbitdo*"]
 
 [tool.setuptools.package-data]
-eightbitdo = ["ui/*.html", "ui/*.svg", "ui/*.desktop", "ui/fonts/*.woff2", "ui/fonts/LICENSE.txt"]
+eightbitdo = ["ui/*.html", "ui/*.svg", "ui/*.desktop", "ui/fonts/*.woff2", "ui/fonts/LICENSE.txt", "udev/*.rules"]

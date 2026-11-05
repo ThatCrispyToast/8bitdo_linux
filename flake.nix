@@ -13,11 +13,11 @@
         pyproject = true;
         src = pkgs.lib.fileset.toSource {
           root = ./.;
-          fileset = pkgs.lib.fileset.unions [ ./pyproject.toml ./README.md ./eightbitdo ./tests ./udev ];
+          fileset = pkgs.lib.fileset.unions [ ./pyproject.toml ./README.md ./eightbitdo ./tests ];
         };
         build-system = [ pkgs.python3Packages.setuptools ];
         postInstall = ''
-          install -Dm644 udev/70-8bitdo.rules $out/lib/udev/rules.d/70-8bitdo.rules
+          install -Dm644 eightbitdo/udev/70-8bitdo.rules $out/lib/udev/rules.d/70-8bitdo.rules
           install -Dm644 eightbitdo/ui/eightbitdo.desktop $out/share/applications/eightbitdo.desktop
           install -Dm644 eightbitdo/ui/icon.svg $out/share/icons/hicolor/scalable/apps/eightbitdo.svg
         '';

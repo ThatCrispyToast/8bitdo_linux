@@ -289,12 +289,12 @@ class Api:
                 with self.kb_factory() as k:
                     out["keyboard"] = keyboard_state(k)
             except Exception as e:  # noqa: BLE001 - reported to the UI
-                out["errors"]["keyboard"] = str(e)
+                out["errors"]["keyboard"] = cli.open_error(e)
             try:
                 with self.mouse_factory() as m:
                     out["mouse"] = mouse_state(m)
             except Exception as e:  # noqa: BLE001
-                out["errors"]["mouse"] = str(e)
+                out["errors"]["mouse"] = cli.open_error(e)
         return out
 
     def dump(self, device: str) -> Dict[str, Any]:

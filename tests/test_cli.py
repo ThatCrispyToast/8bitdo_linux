@@ -1,3 +1,5 @@
+import contextlib
+import io
 import unittest
 
 from eightbitdo import cli, retro87, r8mouse
@@ -34,6 +36,19 @@ class CliParsing(unittest.TestCase):
         self.assertEqual(cli.parse_kb_key("super_a"), 109)  # earlier name
         self.assertEqual(cli.kb_key_name(109), "key_a")
         self.assertEqual(cli.parse_kb_key("k1"), 116)
+
+    def test_udev(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(cli.main(["udev"]), 0)
+        self.assertEqual(out.getvalue(), cli.UDEV_RULES.read_text())
+        self.assertIn('ATTRS{idProduct}=="5200|5201|5205|5206"', out.getvalue())
+
+    def test_permission_hint(self):
+        msg = cli.open_error(PermissionError(13, "Permission denied", "/dev/hidraw6"))
+        self.assertIn("Permission denied", msg)
+        self.assertIn("8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules", msg)
+        self.assertEqual(cli.open_error(FileNotFoundError("gone")), "gone")
 
     def test_mouse_macro_steps(self):
         recs = cli.parse_mouse_macro_steps(["click:left", "delay:50", "tap:shift+1"])

@@ -5,6 +5,7 @@ import argparse
 import dataclasses
 import json
 import sys
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from . import hidraw, r8mouse, retro87, usage_tables as ut
@@ -254,6 +255,22 @@ def _repeat(arg: Optional[str], infinite: int) -> int:
 # ----------------------------------------------------------------------------
 # list
 # ----------------------------------------------------------------------------
+UDEV_RULES = Path(__file__).with_name("udev") / "70-8bitdo.rules"
+UDEV_INSTALL = ("8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules"
+                " && sudo udevadm control --reload && sudo udevadm trigger")
+
+
+def open_error(e: Exception) -> str:
+    """Error text for a failed open; a permission error points at the udev rule."""
+    if isinstance(e, PermissionError):
+        return f"{e}\ninstall the udev rule: {UDEV_INSTALL}"
+    return str(e)
+
+
+def cmd_udev(_args) -> None:
+    print(UDEV_RULES.read_text(), end="")
+
+
 def cmd_list(_args) -> None:
     found = False
     for info in hidraw.enumerate_hidraw(vid=hidraw.VENDOR_8BITDO):
@@ -275,7 +292,7 @@ def open_mouse(args) -> r8mouse.R8Mouse:
     try:
         return r8mouse.R8Mouse.open(args.device)
     except (r8mouse.R8Error, PermissionError, FileNotFoundError) as e:
-        _die(f"cannot open mouse: {e}")
+        _die(f"cannot open mouse: {open_error(e)}")
 
 
 def mouse_show_text(cfg: r8mouse.MouseConfig, version: str, color: Tuple[int, str]) -> None:
@@ -436,7 +453,7 @@ def open_keyboard(args) -> retro87.Retro87:
     try:
         return retro87.Retro87.open(args.device)
     except (retro87.Retro87Error, PermissionError, FileNotFoundError) as e:
-        _die(f"cannot open keyboard: {e}")
+        _die(f"cannot open keyboard: {open_error(e)}")
 
 
 def keyboard_show_text(cfg: retro87.KeyboardConfig) -> None:
@@ -566,6 +583,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--device", help="hidraw node to use instead of auto-detection (e.g. /dev/hidraw6)")
     sp = p.add_subparsers(dest="cmd", required=True)
     sp.add_parser("list", help="list 8BitDo HID interfaces").set_defaults(func=cmd_list)
+    sp.add_parser("udev", help="print the udev rule for non-root access")
     x = sp.add_parser("ui", help="open the Retro Config web UI in your browser")
     x.add_argument("--port", type=int, default=8765); x.add_argument("--no-browser", action="store_true"); x.add_argument("--verbose", action="store_true")
 
@@ -612,6 +630,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     try:
         if args.cmd == "list":
             cmd_list(args)
+        elif args.cmd == "udev":
+            cmd_udev(args)
         elif args.cmd == "ui":
             from .server import serve
             serve(args.port, not args.no_browser, args.verbose)
@@ -623,7 +643,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"error: {e}", file=sys.stderr)
         return 2
     except (r8mouse.R8Error, retro87.Retro87Error, OSError) as e:
-        print(f"error: {e}", file=sys.stderr)
+        print(f"error: {open_error(e)}", file=sys.stderr)
         return 1
     return 0
 
