@@ -60,22 +60,71 @@ inputs.eightbitdo.url = "github:ThatCrispyToast/8bitdo_linux";
 ## Usage
 
 ```sh
-8bitdo-cfg keyboard map caps_lock left_ctrl
-8bitdo-cfg keyboard macro f24 --name copy tap:ctrl+c delay:50 tap:ctrl+v
-8bitdo-cfg mouse dpi 400 800 1600 3200 6400 12800
-8bitdo-cfg mouse button side_back play_pause
-8bitdo-cfg mouse dump > mouse.json
+# Web UI
+8bitdo-cfg ui                                                 # http://127.0.0.1:8765
+
+# Keyboard
+8bitdo-cfg keyboard show                                      # remaps, macros and settings
+8bitdo-cfg keyboard map caps_lock left_ctrl                   # Caps Lock acts as Ctrl
+8bitdo-cfg keyboard map scroll_lock media:play_pause          # a key as a media key
+8bitdo-cfg keyboard map k1 mouse:left                         # Super Button as left click
+8bitdo-cfg keyboard map f12 shift+f12                         # a key as a combo
+8bitdo-cfg keyboard macro f24 tap:ctrl+c delay:50 tap:ctrl+v  # copy, wait 50 ms, paste
+8bitdo-cfg keyboard unmap caps_lock                           # back to default
+
+# Mouse
+8bitdo-cfg mouse show                                         # DPI, rate, buttons and macros
+8bitdo-cfg mouse dpi 400 800 1600 3200 6400 12800             # the six DPI slots
+8bitdo-cfg mouse rate 1000                                    # polling rate in Hz
+8bitdo-cfg mouse button side_back play_pause                  # any of 250+ functions
+8bitdo-cfg mouse macro side_front click:left click:left       # double click
+
+# Backup and restore
+8bitdo-cfg keyboard dump > keyboard.json                      # save to JSON
+8bitdo-cfg keyboard apply keyboard.json                       # write it back
+8bitdo-cfg mouse dump > mouse.json                            # same for the mouse
+
+# Name lists
+8bitdo-cfg keyboard keys                                      # key names
+8bitdo-cfg keyboard targets                                   # remap targets
+8bitdo-cfg mouse functions                                    # button functions
 ```
 
-Full reference: [docs/USAGE.md](docs/USAGE.md)
+Every command, macro step and key name: [docs/USAGE.md](docs/USAGE.md)
 
 ## Development
 
 ```sh
-python3 -m unittest discover -s tests
+git clone https://github.com/ThatCrispyToast/8bitdo_linux && cd 8bitdo_linux
+python3 -m eightbitdo list                       # run from the checkout, no install
+python3 -m unittest discover -s tests            # offline, against fake devices
+python3 -m eightbitdo.server --export demo.html  # UI with sample data, no devices
+nix develop                                      # shell with Python and pytest
+nix build                                        # package, runs the tests
 ```
 
-[Protocol](docs/PROTOCOL.md) · [Reverse Engineering](docs/REVERSE_ENGINEERING.md)
+### Layout
+
+| Path | Contents |
+| --- | --- |
+| `eightbitdo/hidraw.py` | Device discovery (sysfs) and hidraw I/O |
+| `eightbitdo/retro87.py` | Keyboard protocol |
+| `eightbitdo/r8mouse.py` | Mouse protocol |
+| `eightbitdo/usage_tables.py` | Key, media and button-function names |
+| `eightbitdo/cli.py` | Command line |
+| `eightbitdo/server.py`, `eightbitdo/ui/` | Web UI: JSON API and single-file front end |
+| `eightbitdo/udev/` | udev rule |
+| `tests/` | Unit tests; `fake_hid.py` emulates both devices |
+| `tools/reverse/` | Scripts for re-deriving the protocol |
+
+### Guidelines
+
+- Standard library only; no runtime dependencies.
+- New commands follow [Protocol](docs/PROTOCOL.md) or a fresh
+  [decompile](docs/REVERSE_ENGINEERING.md), never guessed bytes, and get a test
+  that pins the exact packet.
+- Writes change the device immediately: on hardware, test with a change you
+  revert in the same run.
 
 ## License
 
