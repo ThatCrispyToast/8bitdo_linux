@@ -1,7 +1,7 @@
 # Usage
 
 Changes take effect immediately. `8bitdo-cfg list` shows detected devices;
-`--device /dev/hidrawN` overrides detection. `8bitdo-cfg udev` prints the udev rule.
+`--device /dev/hidrawN` overrides detection. `8bitdo-cfg udev` prints the udev rule; `--install` installs it unless a rule already grants access.
 
 ## Web UI
 

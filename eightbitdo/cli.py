@@ -4,6 +4,8 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
+import os
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -256,8 +258,11 @@ def _repeat(arg: Optional[str], infinite: int) -> int:
 # list
 # ----------------------------------------------------------------------------
 UDEV_RULES = Path(__file__).with_name("udev") / "70-8bitdo.rules"
-UDEV_INSTALL = ("8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules"
-                " && sudo udevadm control --reload && sudo udevadm trigger")
+UDEV_TARGET = "/etc/udev/rules.d/70-8bitdo.rules"
+UDEV_DIRS = ("/etc/udev/rules.d", "/run/udev/rules.d", "/usr/local/lib/udev/rules.d",
+             "/usr/lib/udev/rules.d", "/lib/udev/rules.d")
+NIXOS_MARKER = Path("/etc/NIXOS")
+UDEV_INSTALL = "8bitdo-cfg udev --install"
 
 
 def open_error(e: Exception) -> str:
@@ -267,8 +272,61 @@ def open_error(e: Exception) -> str:
     return str(e)
 
 
-def cmd_udev(_args) -> None:
-    print(UDEV_RULES.read_text(), end="")
+def granting_rule(dirs=UDEV_DIRS) -> Optional[Path]:
+    """An installed rule that already opens 8BitDo hidraw nodes to the user (ours, Steam's, ...)."""
+    for d in dirs:
+        try:
+            files = sorted(Path(d).glob("*.rules"))
+        except OSError:
+            continue
+        for f in files:
+            try:
+                lines = f.read_text(errors="replace").lower().splitlines()
+            except OSError:
+                continue
+            for line in (s.strip() for s in lines):
+                if (not line.startswith("#") and "hidraw" in line and "2dc8" in line
+                        and ("uaccess" in line or 'mode="0666"' in line)):
+                    return f
+    return None
+
+
+def config_nodes_accessible() -> Optional[bool]:
+    """Whether the connected config interfaces are read/writable; None if none are connected."""
+    nodes = [i.node for i in hidraw.enumerate_hidraw(vid=hidraw.VENDOR_8BITDO)
+             if (i.pid in retro87.PIDS and i.usage_page == retro87.CONFIG_USAGE_PAGE)
+             or (i.pid == r8mouse.PID and i.usage_page == r8mouse.CONFIG_USAGE_PAGE)]
+    if not nodes or os.geteuid() == 0:
+        return None
+    return all(os.access(n, os.R_OK | os.W_OK) for n in nodes)
+
+
+def udev_install(run=subprocess.run, out=print) -> None:
+    """Install the rule with sudo, unless something already grants access."""
+    rule = granting_rule()
+    if rule:
+        out(f"already allowed by {rule}; nothing to do")
+        return
+    if config_nodes_accessible():
+        out("the devices are already accessible; nothing to do")
+        return
+    if NIXOS_MARKER.exists():
+        _die("on NixOS, set hardware.eightbitdo.enable = true instead")
+    steps = [(["sudo", "tee", UDEV_TARGET], UDEV_RULES.read_text()),
+             (["sudo", "udevadm", "control", "--reload"], None),
+             (["sudo", "udevadm", "trigger", "--subsystem-match=hidraw"], None)]
+    for cmd, data in steps:
+        out("+ " + " ".join(cmd))
+        if run(cmd, input=data, text=True, stdout=subprocess.DEVNULL).returncode:
+            _die(f"'{' '.join(cmd)}' failed")
+    out(f"installed {UDEV_TARGET}")
+
+
+def cmd_udev(args) -> None:
+    if args.install:
+        udev_install()
+    else:
+        print(UDEV_RULES.read_text(), end="")
 
 
 def cmd_list(_args) -> None:
@@ -583,7 +641,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--device", help="hidraw node to use instead of auto-detection (e.g. /dev/hidraw6)")
     sp = p.add_subparsers(dest="cmd", required=True)
     sp.add_parser("list", help="list 8BitDo HID interfaces").set_defaults(func=cmd_list)
-    sp.add_parser("udev", help="print the udev rule for non-root access")
+    x = sp.add_parser("udev", help="print the udev rule for non-root access")
+    x.add_argument("--install", action="store_true", help="install it with sudo, unless a rule already grants access")
     x = sp.add_parser("ui", help="open the Retro Config web UI in your browser")
     x.add_argument("--port", type=int, default=8765); x.add_argument("--no-browser", action="store_true"); x.add_argument("--verbose", action="store_true")
 

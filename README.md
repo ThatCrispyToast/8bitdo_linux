@@ -13,9 +13,8 @@ Configure the 8BitDo Retro 87 keyboard and Retro R8 mouse on Linux.
 # Install
 uv tool install git+https://github.com/ThatCrispyToast/8bitdo_linux
 
-# Allow access without root (skip if Steam's udev rules are installed)
-8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules
-sudo udevadm control --reload && sudo udevadm trigger
+# Allow access without root (skipped if a udev rule, e.g. Steam's, already does)
+8bitdo-cfg udev --install
 
 # Open the web UI
 8bitdo-cfg ui
@@ -46,14 +45,9 @@ sudo udevadm control --reload && sudo udevadm trigger
 
 **Nix:** `nix run github:ThatCrispyToast/8bitdo_linux -- ui`
 
-**udev rule** (needed for all of the above, unless Steam's udev rules are installed):
-
-```sh
-8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules
-sudo udevadm control --reload && sudo udevadm trigger
-```
-
-With Nix, use `nix run github:ThatCrispyToast/8bitdo_linux -- udev` for the first command.
+**udev rule** (needed for all of the above): `8bitdo-cfg udev --install`, or
+`nix run github:ThatCrispyToast/8bitdo_linux -- udev --install`. It uses sudo,
+and does nothing if a rule (e.g. Steam's) already grants access.
 
 **NixOS:** installs the tool and udev rule.
 

@@ -1,6 +1,9 @@
 import contextlib
 import io
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
 from eightbitdo import cli, retro87, r8mouse
 
@@ -47,8 +50,49 @@ class CliParsing(unittest.TestCase):
     def test_permission_hint(self):
         msg = cli.open_error(PermissionError(13, "Permission denied", "/dev/hidraw6"))
         self.assertIn("Permission denied", msg)
-        self.assertIn("8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules", msg)
+        self.assertIn("8bitdo-cfg udev --install", msg)
         self.assertEqual(cli.open_error(FileNotFoundError("gone")), "gone")
+
+    def test_granting_rule(self):
+        with tempfile.TemporaryDirectory() as d:
+            rules = Path(d)
+            (rules / "50-other.rules").write_text('KERNEL=="hidraw*", ATTRS{idVendor}=="045e", TAG+="uaccess"\n')
+            (rules / "55-off.rules").write_text('# KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", TAG+="uaccess"\n')
+            self.assertIsNone(cli.granting_rule([d, "/nonexistent"]))
+            steam = rules / "60-steam-input.rules"
+            steam.write_text('KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"\n')
+            self.assertEqual(cli.granting_rule([d]), steam)
+            self.assertIsNotNone(cli.granting_rule([str(cli.UDEV_RULES.parent)]))  # our own rule counts
+
+    def test_udev_install(self):
+        calls, said = [], []
+        def run(cmd, input=None, **kw):
+            calls.append((cmd, input))
+            return mock.Mock(returncode=0)
+        with mock.patch.object(cli, "granting_rule", return_value=None), \
+             mock.patch.object(cli, "config_nodes_accessible", return_value=None), \
+             mock.patch.object(cli, "NIXOS_MARKER", Path("/nonexistent")):
+            cli.udev_install(run=run, out=said.append)
+        self.assertEqual([c for c, _ in calls], [
+            ["sudo", "tee", "/etc/udev/rules.d/70-8bitdo.rules"],
+            ["sudo", "udevadm", "control", "--reload"],
+            ["sudo", "udevadm", "trigger", "--subsystem-match=hidraw"]])
+        self.assertEqual(calls[0][1], cli.UDEV_RULES.read_text())
+
+    def test_udev_install_skips_or_refuses(self):
+        run = mock.Mock()
+        with mock.patch.object(cli, "granting_rule", return_value=Path("/etc/udev/rules.d/60-steam-input.rules")):
+            cli.udev_install(run=run, out=lambda s: None)
+        with mock.patch.object(cli, "granting_rule", return_value=None), \
+             mock.patch.object(cli, "config_nodes_accessible", return_value=True):
+            cli.udev_install(run=run, out=lambda s: None)
+        run.assert_not_called()
+        with mock.patch.object(cli, "granting_rule", return_value=None), \
+             mock.patch.object(cli, "config_nodes_accessible", return_value=False), \
+             mock.patch.object(cli, "NIXOS_MARKER", Path("/")):
+            with self.assertRaises(cli.CliError):
+                cli.udev_install(run=run, out=lambda s: None)
+        run.assert_not_called()
 
     def test_mouse_macro_steps(self):
         recs = cli.parse_mouse_macro_steps(["click:left", "delay:50", "tap:shift+1"])
