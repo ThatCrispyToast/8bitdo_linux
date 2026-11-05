@@ -368,8 +368,9 @@ function render(){
   if (demo){ banner.hidden = false; banner.innerHTML = '<span class="tag px">Demo</span><span>No local server reached, so this page shows <b>sample settings</b>. Run <code>8bitdo-cfg ui</code> on the machine the devices are plugged into to control them for real.</span>'; }
   else if (!kb && !ms){ banner.hidden = false; banner.innerHTML = '<span class="tag px">No device</span><span>Neither device was found. Plug them in over USB, then <b>Refresh</b>. If they are plugged in, make sure the udev rule from <code>udev/70-8bitdo.rules</code> is installed so <code>/dev/hidraw*</code> is readable.</span>'; }
   else banner.hidden = true;
-  $('#view-keyboard').hidden = ui.device !== 'keyboard';
-  $('#view-mouse').hidden = ui.device !== 'mouse';
+  const other = $('#view-' + (ui.device === 'keyboard' ? 'mouse' : 'keyboard'));
+  other.hidden = true; other.innerHTML = ''; // its stale forms would shadow ids like #macro-name
+  $('#view-' + ui.device).hidden = false;
   if (ui.device === 'keyboard') renderKeyboardView(); else renderMouseView();
 }
 
