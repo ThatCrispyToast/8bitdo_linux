@@ -2,8 +2,9 @@
 
 Everything in `docs/PROTOCOL.md` came from 8BitDo Ultimate Software V2 for Windows,
 v1.35 (`resources/8BitDo_Ultimate_Software_V2_Windows_V1.35.zip`), and was then
-confirmed on real hardware. The decompiled sources are deliberately not kept in the
-repository; this page lets a future session regenerate them in about 15 minutes.
+confirmed on real hardware. The decompiled sources are 8BitDo's code, so they are
+not in the repository and must not be committed; this page regenerates them in
+about 15 minutes.
 Scripts live in `tools/reverse/`.
 
 ## 1. Unpack the app
@@ -82,7 +83,7 @@ receiver's `0xFF0B`/`0x0104` collection is selected.
 ## 4. Verify on hardware
 
 Every command was exercised with a reversible round-trip (write, read back, restore)
-using scratch targets that cannot bother the user: the keyboard's `scroll_lock` key and
+using scratch targets that do not disturb normal use: the keyboard's `scroll_lock` key and
 a benign remap of a mouse side button. Findings that only hardware revealed: the mouse
 only commits a profile name when both 10-byte chunks are written; the keyboard stores a
 macro's repeat interval as a trailing delay record that `count` includes; and the mouse

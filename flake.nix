@@ -28,6 +28,8 @@
         '';
         meta = with pkgs.lib; {
           description = "Configure the 8BitDo Retro 87 keyboard and Retro R8 mouse";
+          homepage = "https://github.com/ThatCrispyToast/8bitdo_linux";
+          license = licenses.mit;
           mainProgram = "8bitdo-cfg";
           platforms = platforms.linux;
         };

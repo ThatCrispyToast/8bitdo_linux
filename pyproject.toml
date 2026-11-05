@@ -9,7 +9,20 @@ description = "Configure the 8BitDo Retro 87 Mechanical Keyboard and Retro R8 Mo
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
+authors = [{ name = "Aniket Chadalavada" }]
+keywords = ["8bitdo", "keyboard", "mouse", "hidraw", "linux"]
+classifiers = [
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/ThatCrispyToast/8bitdo_linux"
+Issues = "https://github.com/ThatCrispyToast/8bitdo_linux/issues"
 
 [project.scripts]
 8bitdo-cfg = "eightbitdo.cli:main"

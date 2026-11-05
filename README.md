@@ -13,7 +13,7 @@ There is a command line (`8bitdo-cfg ...`) and a local web UI (`8bitdo-cfg ui`).
 
 ## What it can do
 
-Keyboard (USB `2dc8:5200`, also `5201` via the 2.4 GHz receiver):
+Keyboard (USB `2dc8:5200`):
 
 - read the full configuration (profile name, volume level, remaps, macros)
 - remap any key to another key (with one modifier), to `fn`, to a media key
@@ -38,8 +38,17 @@ Mouse (USB `2dc8:5205`):
   there is no "while held" mode (the `fire` function is a single click)
 - profile name, factory reset, JSON dump / apply
 
-Firmware updates are **not** implemented (the official app uses separate
-DFU tools for that).
+## Limitations
+
+- Tested over the USB cable only. The keyboard's 2.4 GHz receiver (`5201`) is
+  accepted but untested; the mouse's 2.4 GHz adapter (`5206`) is not supported.
+- Firmware updates are **not** implemented (the official app uses separate
+  DFU tools for that).
+- The keyboard's firmware version is not readable over HID; the USB `bcdDevice`
+  is shown instead.
+- The keyboard's volume level (the app's "Voice") is stored and read back, but
+  its physical effect has not been characterised.
+- Mouse macros cannot repeat while a button is held (see above).
 
 ## Install
 
@@ -63,6 +72,7 @@ Or just run it: `nix run github:ThatCrispyToast/8bitdo_linux -- list`.
 ### Anywhere else
 
 ```
+git clone https://github.com/ThatCrispyToast/8bitdo_linux && cd 8bitdo_linux
 pip install .            # gives you the 8bitdo-cfg command
 sudo cp udev/70-8bitdo.rules /etc/udev/rules.d/ && sudo udevadm control --reload && sudo udevadm trigger
 ```
@@ -173,5 +183,23 @@ python3 -m unittest discover -s tests
 nix build              # builds the package and runs the tests
 ```
 
-`resources/` holds the Windows software the protocol was derived from
-(ignored by git).
+To re-derive or extend the protocol, put the official Windows software zip in
+`resources/` (ignored by git) and follow `docs/REVERSE_ENGINEERING.md`.
+
+## Related projects
+
+- [8bitdo-kbd-mapper](https://github.com/goncalor/8bitdo-kbd-mapper) (GPL-3.0):
+  key remapping and profiles for the Retro Mechanical Keyboard over libusb.
+
+## Disclaimer
+
+This project is not affiliated with or endorsed by 8BitDo. Product names are
+trademarks of their owners. The protocol was worked out from the official
+Windows software for interoperability; this repository contains none of 8BitDo's
+code. Writes take effect on the device immediately. The tool has been used on
+the author's own hardware, but it comes with no warranty.
+
+## License
+
+MIT, see `LICENSE`. The bundled fonts (Press Start 2P, IBM Plex) are under the
+SIL Open Font License, see `eightbitdo/ui/fonts/LICENSE.txt`.
