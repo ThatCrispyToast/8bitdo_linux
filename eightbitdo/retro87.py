@@ -61,11 +61,13 @@ REC_MOD_UP = 0x03
 REC_DELAY = 0x0F
 MACRO_INFINITE = 0xFF
 
-# extra physical key indices used by the official app (besides HID usages)
+# extra physical key indices used by the official app (besides HID usages): the red A / B keys
+# right of Right Alt (app KA / KB) and the Super Buttons on the rear ports (K1..K8, two per port)
 EXTRA_KEYS = {
-    "super_a": 109, "super_b": 108,
+    "key_a": 109, "key_b": 108,
     "k1": 116, "k2": 117, "k3": 114, "k4": 115, "k5": 112, "k6": 113, "k7": 110, "k8": 111,
 }
+EXTRA_KEY_ALIASES = {"super_a": "key_a", "super_b": "key_b"}  # earlier names, still accepted
 EXTRA_KEY_NAMES = {v: k for k, v in EXTRA_KEYS.items()}
 
 

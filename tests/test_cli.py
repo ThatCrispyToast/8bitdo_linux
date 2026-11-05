@@ -28,6 +28,13 @@ class CliParsing(unittest.TestCase):
         self.assertEqual([(r.type, r.code) for r in recs], [
             (0x83, 0xE0), (0x81, 0x06), (0x01, 0x06), (0x03, 0xE0), (0x0F, 20), (0x81, 4), (0x01, 4)])
 
+    def test_extra_keys(self):
+        self.assertEqual(cli.parse_kb_key("key_a"), 109)
+        self.assertEqual(cli.parse_kb_key("key_b"), 108)
+        self.assertEqual(cli.parse_kb_key("super_a"), 109)  # earlier name
+        self.assertEqual(cli.kb_key_name(109), "key_a")
+        self.assertEqual(cli.parse_kb_key("k1"), 116)
+
     def test_mouse_macro_steps(self):
         recs = cli.parse_mouse_macro_steps(["click:left", "delay:50", "tap:shift+1"])
         self.assertEqual([(r.state, r.code, r.delay_ms) for r in recs], [

@@ -145,10 +145,10 @@ slash caps_lock print_screen scroll_lock pause insert home page_up delete end
 page_down right left down up num_lock kp_1..kp_0 kp_slash kp_asterisk kp_minus
 kp_plus kp_enter kp_period left_ctrl left_shift left_alt left_gui right_ctrl
 right_shift right_alt right_gui application`, plus the keyboard's extra
-physical keys: `super_b super_a` are the red B and A keys between Right Alt and
-Right Ctrl (the names predate knowing that), and `k1`..`k8` are the Super Buttons
-on the four rear ports: `k1 k2` on port A, `k3 k4` on B, `k5 k6` on X, `k7 k8`
-on Y, the odd one being the pair's A button.
+physical keys: `key_b key_a` are the red B and A keys between Right Alt and
+Right Ctrl (their earlier names `super_b super_a` still work), and `k1`..`k8`
+are the Super Buttons on the four rear ports: `k1 k2` on port A, `k3 k4` on B,
+`k5 k6` on X, `k7 k8` on Y, the odd one being the pair's A button.
 
 ## Python API
 

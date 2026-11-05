@@ -50,7 +50,7 @@ Writes are acknowledged by a reply `E4 08 ...`.
 
 Key index = USB HID keyboard usage of the physical key (A = 4 ...
 right GUI = 0xE7). Extra indices (app `KA_MAP`.. `K8_MAP`): the red A / B keys
-right of Right Alt = 109 / 108 (CLI `super_a` / `super_b`); the Super Buttons on the
+right of Right Alt = 109 / 108 (CLI `key_a` / `key_b`); the Super Buttons on the
 rear ports K1..K8 = 116,117,114,115,112,113,110,111, two per port (A: K1/K2, B: K3/K4,
 X: K5/K6, Y: K7/K8; the odd one is the pair's A button). The Retro 87 has no Fn or
 Menu key; the app's layout (`CustomizePosition.getKeyBoards`) has KB, KA there.

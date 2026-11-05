@@ -110,6 +110,7 @@ def format_kb_mapping(m: retro87.KeyMapping) -> str:
 
 def parse_kb_key(text: str) -> int:
     t = text.strip().lower()
+    t = retro87.EXTRA_KEY_ALIASES.get(t, t)
     if t in retro87.EXTRA_KEYS:
         return retro87.EXTRA_KEYS[t]
     code = ut.key_code(t)
