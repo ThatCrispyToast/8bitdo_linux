@@ -37,12 +37,20 @@ The udev rule grants access without root. Steam's rules already include it.
 
 ## Installation
 
+**uv:** `uv tool install git+https://github.com/ThatCrispyToast/8bitdo_linux`
+
 **pipx:** `pipx install git+https://github.com/ThatCrispyToast/8bitdo_linux`
 
 **Nix:** `nix run github:ThatCrispyToast/8bitdo_linux -- ui`
 
-These need the udev rule from [Quickstart](#quickstart) (with Nix:
-`nix run github:ThatCrispyToast/8bitdo_linux -- udev`).
+**udev rule** (needed for all of the above, unless Steam is installed):
+
+```sh
+8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules
+sudo udevadm control --reload && sudo udevadm trigger
+```
+
+With Nix, use `nix run github:ThatCrispyToast/8bitdo_linux -- udev` for the first command.
 
 **NixOS:** installs the tool and udev rule.
 
