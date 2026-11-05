@@ -1,5 +1,8 @@
+import http.client
 import json
+import threading
 import unittest
+from http.server import ThreadingHTTPServer
 
 from eightbitdo import server, retro87, r8mouse, usage_tables as ut
 
@@ -218,6 +221,67 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(m["r8_functions"][1]["label"], "Left click")
         self.assertEqual(m["r8_functions"][26]["label"], "DPI cycle")
         self.assertTrue(all(f["group"] for f in m["r8_functions"]))
+
+
+
+class StubApi:
+    """Records what reached the device layer."""
+
+    def __init__(self):
+        self.calls = []
+
+    def post(self, device, action, body):
+        self.calls.append((device, action))
+        return {"ok": True}
+
+    def state(self):
+        return {"keyboard": None, "mouse": None, "errors": {}}
+
+
+class HttpSecurity(unittest.TestCase):
+    def setUp(self):
+        self.api = StubApi()
+        handler = type("H", (server.Handler,), {"api": self.api, "page": b"<p>ui</p>", "verbose": False})
+        self.httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        self.port = self.httpd.server_address[1]
+        threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
+
+    def tearDown(self):
+        self.httpd.shutdown()
+        self.httpd.server_close()
+
+    def request(self, method, path, host, origin=None, header=True):
+        headers = {"Host": host, "Content-Type": "application/json"}
+        if origin:
+            headers["Origin"] = origin
+        if header:
+            headers[server.REQUIRED_HEADER[0]] = server.REQUIRED_HEADER[1]
+        c = http.client.HTTPConnection("127.0.0.1", self.port)
+        c.request(method, path, body="{}" if method == "POST" else None, headers=headers)
+        status = c.getresponse().status
+        c.close()
+        return status
+
+    def test_local_page_works(self):
+        for host in (f"127.0.0.1:{self.port}", f"localhost:{self.port}"):
+            self.assertEqual(self.request("GET", "/", host), 200)
+            self.assertEqual(self.request("GET", "/api/state", host), 200)
+            self.assertEqual(self.request("POST", "/api/keyboard/reset", host, f"http://{host}"), 200)
+        self.assertEqual(len(self.api.calls), 2)
+
+    def test_dns_rebinding_is_refused(self):
+        evil = f"evil.example:{self.port}"
+        self.assertEqual(self.request("GET", "/", evil), 403)
+        self.assertEqual(self.request("GET", "/api/state", evil), 403)
+        self.assertEqual(self.request("POST", "/api/keyboard/reset", evil, f"http://{evil}"), 403)
+        self.assertEqual(self.request("POST", "/api/keyboard/reset", f"127.0.0.1:{self.port + 1}"), 403)
+        self.assertEqual(self.api.calls, [])
+
+    def test_cross_site_post_is_refused(self):
+        local = f"127.0.0.1:{self.port}"
+        self.assertEqual(self.request("POST", "/api/keyboard/reset", local, "http://evil.example"), 403)
+        self.assertEqual(self.request("POST", "/api/keyboard/reset", local, f"http://{local}", header=False), 403)
+        self.assertEqual(self.api.calls, [])
 
 
 if __name__ == "__main__":

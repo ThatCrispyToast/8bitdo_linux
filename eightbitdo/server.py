@@ -1,8 +1,10 @@
 """Local web UI (``8bitdo-cfg ui``): a stdlib HTTP server with a small JSON API
 over the device modules, serving the single-file front end in ``ui/``.
 
-Binds to 127.0.0.1 only.  POSTs must carry ``X-Requested-With: retro-config``
-so a random web page cannot drive the devices through the browser.
+Binds to 127.0.0.1 only.  Every request must name this server in its Host
+header (127.0.0.1 / localhost / [::1] on this port), which defeats DNS rebinding,
+and POSTs must also carry ``X-Requested-With: retro-config`` from a same-origin
+page, so other web sites cannot drive the devices through the browser.
 """
 from __future__ import annotations
 
@@ -408,6 +410,10 @@ class Handler(BaseHTTPRequestHandler):
     def _json(self, status: int, obj: Any) -> None:
         self._send(status, json.dumps(obj).encode("utf-8"), "application/json; charset=utf-8")
 
+    def _local_host(self) -> bool:
+        port = self.server.server_address[1]
+        return self.headers.get("Host", "") in {f"127.0.0.1:{port}", f"localhost:{port}", f"[::1]:{port}"}
+
     def _same_origin(self) -> bool:
         origin = self.headers.get("Origin")
         if origin and urlparse(origin).netloc != self.headers.get("Host", ""):
@@ -415,6 +421,9 @@ class Handler(BaseHTTPRequestHandler):
         return self.headers.get(REQUIRED_HEADER[0]) == REQUIRED_HEADER[1]
 
     def do_GET(self) -> None:  # noqa: N802
+        if not self._local_host():
+            self._json(HTTPStatus.FORBIDDEN, {"ok": False, "error": "forbidden"})
+            return
         path = urlparse(self.path).path
         if path in ("/", "/index.html"):
             self._send(HTTPStatus.OK, self.page, "text/html; charset=utf-8")
@@ -431,6 +440,9 @@ class Handler(BaseHTTPRequestHandler):
             self._json(HTTPStatus.NOT_FOUND, {"ok": False, "error": "not found"})
 
     def do_POST(self) -> None:  # noqa: N802
+        if not self._local_host():
+            self._json(HTTPStatus.FORBIDDEN, {"ok": False, "error": "forbidden"})
+            return
         path = urlparse(self.path).path
         m = re.fullmatch(r"/api/(keyboard|mouse)/([a-z_]+)", path)
         if not m:
