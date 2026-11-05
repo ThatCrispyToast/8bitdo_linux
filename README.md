@@ -10,13 +10,16 @@ Configure the 8BitDo Retro 87 keyboard and Retro R8 mouse on Linux.
 ## Quickstart
 
 ```sh
+# Install
 uv tool install git+https://github.com/ThatCrispyToast/8bitdo_linux
+
+# Allow access without root (skip if Steam is installed)
 8bitdo-cfg udev | sudo tee /etc/udev/rules.d/70-8bitdo.rules
 sudo udevadm control --reload && sudo udevadm trigger
+
+# Open the web UI
 8bitdo-cfg ui
 ```
-
-The udev rule grants access without root. Steam's rules already include it.
 
 ## Features
 
