@@ -42,7 +42,11 @@
       });
 
       apps = forAll (pkgs: rec {
-        eightbitdo = { type = "app"; program = "${mkPackage pkgs}/bin/8bitdo-cfg"; };
+        eightbitdo = {
+          type = "app";
+          program = "${mkPackage pkgs}/bin/8bitdo-cfg";
+          meta.description = "Configure the 8BitDo Retro 87 keyboard and Retro R8 mouse";
+        };
         default = eightbitdo;
       });
 

@@ -7,7 +7,7 @@ name = "eightbitdo"
 version = "0.1.0"
 description = "Configure the 8BitDo Retro 87 Mechanical Keyboard and Retro R8 Mouse on Linux"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Aniket Chadalavada" }]
 keywords = ["8bitdo", "keyboard", "mouse", "hidraw", "linux"]
