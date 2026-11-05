@@ -26,7 +26,7 @@ uv tool install git+https://github.com/ThatCrispyToast/8bitdo_linux
 - Keyboard and mouse macros
 - Mouse DPI, polling rate, lift-off, wheel and 250+ button functions
 - JSON backup and restore
-- Web UI and CLI, no dependencies
+- Web UI and CLI
 
 ## Supported Devices
 
@@ -90,7 +90,7 @@ inputs.eightbitdo.url = "github:ThatCrispyToast/8bitdo_linux";
 8bitdo-cfg mouse functions                                    # button functions
 ```
 
-Every command, macro step and key name: [docs/USAGE.md](docs/USAGE.md)
+All commands, macro steps and key names @ [docs/USAGE.md](docs/USAGE.md)
 
 ## Development
 
@@ -120,11 +120,9 @@ nix build                                        # package, runs the tests
 ### Guidelines
 
 - Standard library only; no runtime dependencies.
-- New commands follow [Protocol](docs/PROTOCOL.md) or a fresh
-  [decompile](docs/REVERSE_ENGINEERING.md), never guessed bytes, and get a test
+- New commands should follow [Protocol](docs/PROTOCOL.md) or a fresh
+  [decompile](docs/REVERSE_ENGINEERING.md), ideally get a test
   that pins the exact packet.
-- Writes change the device immediately: on hardware, test with a change you
-  revert in the same run.
 
 ## License
 
